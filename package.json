@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "cd backend && npm run dev",
-    "frontend": "cd frontik && npm run dev",
-    "install-all": "npm install && cd backend && npm install && cd ../frontik && npm install",
+    "frontend": "cd frontick && npm run dev",
+    "install-all": "npm install && cd backend && npm install && cd ../frontick && npm install",
     "start": "npm run dev"
   },
   "devDependencies": {
