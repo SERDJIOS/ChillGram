@@ -30,7 +30,7 @@ const EditProfilePage = () => {
       setLoading(true)
       const token = localStorage.getItem('token')
       
-      const response = await axios.get('${API_CONFIG.API_URL}/profile', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -91,7 +91,7 @@ const EditProfilePage = () => {
         formData.append('website', profile.website)
         formData.append('profileImage', imageFile)
 
-        response = await axios.put('${API_CONFIG.API_URL}/profile', formData, {
+        response = await axios.put(`${API_CONFIG.API_URL}/profile`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -106,7 +106,7 @@ const EditProfilePage = () => {
           website: profile.website
         }
 
-        response = await axios.put('${API_CONFIG.API_URL}/profile', updateData, {
+        response = await axios.put(`${API_CONFIG.API_URL}/profile`, updateData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'

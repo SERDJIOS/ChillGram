@@ -26,7 +26,7 @@ const ResetPasswordPage = () => {
     setMessage('')
 
     try {
-      const response = await axios.post('${API_CONFIG.API_URL}/auth/forgot-password', {
+      const response = await axios.post(`${API_CONFIG.API_URL}/auth/forgot-password`, {
         email: email.trim()
       })
 

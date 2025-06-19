@@ -40,7 +40,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
       setLoading(true)
       const token = localStorage.getItem('token')
       
-      const response = await fetch('${API_CONFIG.API_URL}/notifications', {
+      const response = await fetch(`${API_CONFIG.API_URL}/notifications`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -162,7 +162,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem('token')
       
-      await fetch('${API_CONFIG.API_URL}/notifications/read-all', {
+      await fetch(`${API_CONFIG.API_URL}/notifications/read-all`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

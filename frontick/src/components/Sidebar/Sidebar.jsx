@@ -64,7 +64,7 @@ const Sidebar = ({ onPostCreated }) => {
       const token = localStorage.getItem('token')
       if (!token) return
 
-      const response = await fetch('${API_CONFIG.API_URL}/notifications/unread-count', {
+      const response = await fetch(`${API_CONFIG.API_URL}/notifications/unread-count`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -87,7 +87,7 @@ const Sidebar = ({ onPostCreated }) => {
         return
       }
 
-      const response = await fetch('${API_CONFIG.API_URL}/messages/unread-count', {
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/unread-count`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -214,7 +214,7 @@ const Sidebar = ({ onPostCreated }) => {
       
       formData.append('caption', postData.caption)
 
-      const response = await fetch('${API_CONFIG.API_URL}/posts', {
+      const response = await fetch(`${API_CONFIG.API_URL}/posts`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

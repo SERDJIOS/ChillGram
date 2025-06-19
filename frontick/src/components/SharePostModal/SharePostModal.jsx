@@ -30,7 +30,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       setError('');
       
       const token = localStorage.getItem('token');
-      const response = await axios.get('${API_CONFIG.API_URL}/messages/chats', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/messages/chats`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -71,7 +71,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       setError('');
       
       const token = localStorage.getItem('token');
-      const response = await axios.get('${API_CONFIG.API_URL}/profile/search/users', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/profile/search/users`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -97,7 +97,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
   const fetchAllUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('${API_CONFIG.API_URL}/profile/search/users', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/profile/search/users`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -164,7 +164,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       
       // Отправляем пост каждому выбранному пользователю
       const responses = await Promise.all(selectedUsers.map(user => 
-        axios.post('${API_CONFIG.API_URL}/messages/share-post', {
+        axios.post(`${API_CONFIG.API_URL}/messages/share-post`, {
           recipientId: user.id,
           postId: post._id,
           message: `Shared a post with you`

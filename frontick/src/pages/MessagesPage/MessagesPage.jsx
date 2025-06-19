@@ -39,7 +39,7 @@ const MessagesPage = () => {
       }
 
       // Инициализация Socket.IO
-      const newSocket = io('${API_CONFIG.BASE_URL}', {
+      const newSocket = io(API_CONFIG.SOCKET_URL, {
         auth: {
           token: token
         }
@@ -130,7 +130,7 @@ const MessagesPage = () => {
   const fetchConversations = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('${API_CONFIG.API_URL}/messages/chats', {
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/chats`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -250,7 +250,7 @@ const MessagesPage = () => {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('${API_CONFIG.API_URL}/messages/send', {
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

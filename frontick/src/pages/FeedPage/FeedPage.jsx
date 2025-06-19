@@ -22,7 +22,7 @@ const FeedPage = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.get('${API_CONFIG.API_URL}/posts', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/posts`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       

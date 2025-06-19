@@ -211,7 +211,7 @@ const ChatWindow = ({
     try {
       // Отправляем сообщение с base64 изображением напрямую
       const token = localStorage.getItem('token')
-      const messageResponse = await fetch('${API_CONFIG.API_URL}/messages/send', {
+      const messageResponse = await fetch(`${API_CONFIG.API_URL}/messages/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

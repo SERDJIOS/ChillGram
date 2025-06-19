@@ -72,7 +72,7 @@ const ProfilePage = () => {
       }
       
       // Всегда получаем собственный профиль
-      const response = await axios.get('${API_CONFIG.API_URL}/profile', {
+      const response = await axios.get(`${API_CONFIG.API_URL}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
