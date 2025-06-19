@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const Follow = require('../models/followModel');
 const multer = require('multer');
+const cloudinary = require('../config/cloudinary');
 
 // Настройка multer для загрузки изображений в память
 const storage = multer.memoryStorage();
@@ -139,8 +140,23 @@ const updateProfile = async (req, res) => {
     // Обработка загруженного изображения
     if (req.file) {
       // Processing uploaded image
-      const imageBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      user.profileImage = imageBase64;
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          {
+            folder: 'avatars',
+            transformation: [
+              { width: 400, height: 400, crop: 'fill' },
+              { quality: 'auto' }
+            ]
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        ).end(req.file.buffer);
+      });
+      
+      user.profileImage = result.secure_url;
       // Image saved to user profile
     }
 

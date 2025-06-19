@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const Like = require('../models/likeModel');
 const Comment = require('../models/commentModel');
 const Follow = require('../models/followModel');
+const cloudinary = require('../config/cloudinary');
 
 // Создание нового поста
 const createPost = async (req, res) => {
@@ -15,17 +16,32 @@ const createPost = async (req, res) => {
       return res.status(400).json({ message: 'At least one image is required' });
     }
 
-    // Конвертируем все изображения в Base64
-    const imageDataUrls = req.files.map(file => {
-      const imageBase64 = file.buffer.toString('base64');
-      return `data:${file.mimetype};base64,${imageBase64}`;
+    // Загружаем изображения в Cloudinary
+    const imageUploadPromises = req.files.map(file => {
+      return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          {
+            folder: 'posts',
+            transformation: [
+              { width: 1080, height: 1080, crop: 'limit' },
+              { quality: 'auto' }
+            ]
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result.secure_url);
+          }
+        ).end(file.buffer);
+      });
     });
+
+    const imageUrls = await Promise.all(imageUploadPromises);
 
     // Создаем новый пост
     const newPost = new Post({
       author: userId,
-      images: imageDataUrls, // Массив изображений
-      image: imageDataUrls[0], // Первое изображение для совместимости со старым кодом
+      images: imageUrls, // Массив URL изображений
+      image: imageUrls[0], // Первое изображение для совместимости со старым кодом
       caption: caption || ''
     });
 
@@ -309,9 +325,24 @@ const updatePost = async (req, res) => {
 
     // Если есть новое изображение
     if (req.file) {
-      const imageBase64 = req.file.buffer.toString('base64');
-      const imageDataUrl = `data:${req.file.mimetype};base64,${imageBase64}`;
-      post.image = imageDataUrl;
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          {
+            folder: 'posts',
+            transformation: [
+              { width: 1080, height: 1080, crop: 'limit' },
+              { quality: 'auto' }
+            ]
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        ).end(req.file.buffer);
+      });
+      
+      post.image = result.secure_url;
+      post.images = [result.secure_url]; // Обновляем массив тоже
     }
 
     await post.save();
