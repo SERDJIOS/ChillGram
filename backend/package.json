@@ -1,0 +1,39 @@
+{
+  "name": "chillgram-backend",
+  "version": "1.0.0",
+  "description": "ChillGram Backend API - Node.js + Express + MongoDB",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "migrate": "node src/migrations/001_initial_setup.js",
+    "test:mongodb": "node src/scripts/test_mongodb.js",
+    "test:cloudinary": "node src/scripts/test_cloudinary.js",
+    "test:all": "npm run test:mongodb && npm run test:cloudinary",
+    "setup": "npm run test:all && npm run migrate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["chillgram", "backend", "api", "express", "mongodb", "social-media"],
+  "author": "SERDJIOS",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.6.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.2",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

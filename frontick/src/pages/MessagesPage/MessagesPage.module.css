@@ -1,0 +1,215 @@
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.messagesContainer {
+  margin-left: 245px;
+  display: flex;
+  width: calc(100vw - 245px);
+  height: 100vh;
+  border: 1px solid #dbdbdb;
+  border-left: none;
+}
+
+.conversationPanel {
+  width: 349px;
+  min-width: 349px;
+  border-right: 1px solid #dbdbdb;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatPanel {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingContainer {
+  margin-left: 245px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100vw - 245px);
+  height: 100vh;
+}
+
+.loading {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #8e8e8e;
+}
+
+.error {
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.error p {
+  font-size: 16px;
+  color: #ed4956;
+  margin-bottom: 16px;
+}
+
+.error button {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.error button:hover {
+  background-color: #1877f2;
+}
+
+/* Состояние "чат не выбран" */
+.noChatSelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  background-color: #ffffff;
+}
+
+.noChatContent {
+  text-align: center;
+  max-width: 400px;
+  padding: 40px;
+}
+
+.messageIcon {
+  font-size: 96px;
+  margin-bottom: 24px;
+  opacity: 0.3;
+}
+
+.noChatContent h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: #262626;
+  margin-bottom: 16px;
+  line-height: 26px;
+}
+
+.noChatContent p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+  margin-bottom: 24px;
+  line-height: 18px;
+}
+
+.sendMessageButton {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sendMessageButton:hover {
+  background-color: #1877f2;
+}
+
+.sendMessageButton:active {
+  background-color: #166fe5;
+}
+
+/* Скрытие панелей на мобильных */
+.hidden {
+  display: none;
+}
+
+/* Мобильная версия */
+@media (max-width: 905px) {
+  .container {
+    height: 100vh;
+  }
+  
+  .messagesContainer {
+    margin-left: 0;
+    margin-bottom: 60px; /* Отступ для нижней навигации */
+    border: none;
+    width: 100vw;
+    height: calc(100vh - 60px);
+  }
+
+  .conversationPanel {
+    width: 100vw;
+    min-width: 100vw;
+    border-right: none;
+    height: 100vh;
+  }
+
+  .chatPanel {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .loadingContainer {
+    margin-left: 0;
+    width: 100vw;
+    height: calc(100vh - 60px);
+  }
+
+  .noChatContent {
+    padding: 20px;
+  }
+
+  .messageIcon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .noChatContent h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .noChatContent p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.messagesContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Состояния загрузки */
+.loadingContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Hover эффекты */
+.sendMessageButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 149, 246, 0.2);
+} 

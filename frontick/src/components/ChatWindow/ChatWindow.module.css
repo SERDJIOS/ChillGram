@@ -1,0 +1,1267 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+/* Заголовок чата */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  border-bottom: 1px solid #dbdbdb;
+  background-color: #ffffff;
+  min-height: 30px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 12px;
+  border-radius: 50%;
+  color: #262626;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton:hover {
+  background-color: #f2f2f2;
+}
+
+.chatInfo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.avatarContainer {
+  position: relative;
+  margin-right: 12px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background-color: #00ba7c;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.username {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 2px;
+}
+
+.status {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #8e8e8e;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: #262626;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton:hover {
+  background-color: #f2f2f2;
+}
+
+/* Область сообщений */
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #8e8e8e;
+}
+
+.noMessages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+}
+
+.noMessagesContent {
+  text-align: center;
+  max-width: 300px;
+}
+
+.noMessagesAvatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+  margin-bottom: 24px;
+}
+
+.noMessagesContent h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: #262626;
+  margin-bottom: 16px;
+}
+
+.noMessagesContent p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+  line-height: 18px;
+}
+
+.messagesList {
+  padding: 16px 20px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dateHeader {
+  text-align: center;
+  margin: 16px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8e8e8e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Сообщения */
+.messageWrapper {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: flex-end;
+}
+
+.messageWrapper.own {
+  justify-content: flex-end;
+}
+
+.messageWrapper.other {
+  justify-content: flex-start;
+}
+
+.messageAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+  margin-right: 8px;
+  margin-bottom: 4px;
+}
+
+.message {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  word-wrap: break-word;
+  animation: messageSlideIn 0.3s ease-out;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.message:hover {
+  opacity: 0.9;
+}
+
+.ownMessage {
+  background-color: #7c8285;
+  color: #ffffff;
+  margin-left: auto;
+}
+
+.otherMessage {
+  background-color: #efefef;
+  color: #262626;
+  margin-right: auto;
+}
+
+/* Контекстное меню сообщений */
+.messageMenu {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  display: flex;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #262626;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.menuButton:hover {
+  background-color: #f2f2f2;
+}
+
+.menuButton:last-child {
+  color: #ed4956;
+}
+
+.menuButton:last-child:hover {
+  background-color: #fef7f7;
+}
+
+/* Редактирование сообщений */
+.editContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.editInput {
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ownMessage .editInput {
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.otherMessage .editInput {
+  border-bottom-color: rgba(38, 38, 38, 0.3);
+  color: #262626;
+}
+
+.editInput::placeholder {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.editButtons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.saveButton,
+.cancelButton {
+  background: none;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.saveButton {
+  color: inherit;
+}
+
+.cancelButton {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.ownMessage .saveButton:hover,
+.ownMessage .cancelButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.otherMessage .saveButton:hover,
+.otherMessage .cancelButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.editedLabel {
+  font-size: 11px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.messageTime {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  opacity: 0.7;
+  text-align: right;
+}
+
+.ownMessage .messageTime {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.otherMessage .messageTime {
+  color: #8e8e8e;
+}
+
+/* Индикатор печатания */
+.typingIndicator {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 8px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.typingDots {
+  background-color: #efefef;
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.typingDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #8e8e8e;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typingDots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typingDots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+/* Поле ввода */
+.inputContainer {
+  border-top: 1px solid #dbdbdb;
+  background-color: #ffffff;
+  padding: 12px 20px;
+  position: relative;
+}
+
+/* Превью изображения */
+.imagePreview {
+  margin-bottom: 8px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dbdbdb;
+  display: inline-block;
+}
+
+.previewContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.previewImage {
+  max-width: 120px;
+  max-height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #262626;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.removeImageButton:hover {
+  background-color: #000000;
+}
+
+.removeImageButton svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Поделенный пост */
+.sharedPost {
+  background-color: #f8f9fa;
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  max-width: 280px;
+  position: relative;
+}
+
+.clickablePost {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickablePost:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #0095f6;
+}
+
+.sharedPostOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 12px;
+}
+
+.clickablePost:hover .sharedPostOverlay {
+  opacity: 1;
+}
+
+.viewPostButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.sharedPostHeader {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.sharedPostAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+  border: 1px solid #dbdbdb;
+}
+
+.sharedPostAuthor {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.sharedPostImage {
+  position: relative;
+  overflow: hidden;
+}
+
+.sharedPostImg {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+
+.sharedPostImg:hover {
+  opacity: 0.95;
+}
+
+.sharedPostCaption {
+  padding: 8px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: #262626;
+  line-height: 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #e1e8ed;
+}
+
+.sharedPostMessage {
+  padding: 8px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: #8e8e8e;
+  line-height: 16px;
+  background-color: #f8f9fa;
+  font-style: italic;
+  border-top: 1px solid #e1e8ed;
+}
+
+/* Изображения в сообщениях */
+.messageImage {
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.ownMessage .messageImage {
+  border-radius: 12px 12px 4px 12px;
+}
+
+.otherMessage .messageImage {
+  border-radius: 12px 12px 12px 4px;
+}
+
+.chatImage {
+  max-width: 100%;
+  max-height: 180px;
+  min-width: 120px;
+  min-height: 80px;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  object-fit: cover;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chatImage:hover {
+  opacity: 0.95;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Модальное окно для просмотра изображения */
+.imageModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.imageModalContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageModalImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.imageModalClose {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #262626;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.imageModalClose:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.inputForm {
+  width: 100%;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 22px;
+  padding: 8px 12px;
+  transition: border-color 0.2s ease;
+}
+
+.inputWrapper:focus-within {
+  border-color: #0095f6;
+}
+
+.imageButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-right: 8px;
+  color: #8e8e8e;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageButton:hover {
+  color: #262626;
+}
+
+.emojiButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-right: 8px;
+  color: #8e8e8e;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emojiButton:hover {
+  color: #262626;
+}
+
+.messageInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #262626;
+  padding: 4px 0;
+  resize: none;
+}
+
+.messageInput::placeholder {
+  color: #8e8e8e;
+}
+
+.messageInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sendButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 8px;
+  color: #0095f6;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+}
+
+.sendButton.active {
+  opacity: 1;
+}
+
+.sendButton:hover.active {
+  color: #1877f2;
+}
+
+.sendButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.sendingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e3e3e3;
+  border-top: 2px solid #0095f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.connectionStatus {
+  text-align: center;
+  margin-top: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #ed4956;
+}
+
+/* Скроллбар */
+.messagesContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messagesContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb {
+  background-color: #c7c7c7;
+  border-radius: 3px;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8;
+}
+
+/* Анимации */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 905px) {
+  .container {
+    height: calc(100vh - 60px); /* Учитываем высоту нижней навигации */
+  }
+  
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .messagesContainer {
+    height: calc(100vh - 60px - 70px); /* Вычитаем высоту навигации и заголовка */
+  }
+  
+  .messagesList {
+    padding: 16px;
+    padding-bottom: 80px; /* Дополнительный отступ снизу */
+  }
+  
+  .inputContainer {
+    padding: 12px 16px;
+    position: fixed;
+    bottom: 60px; /* Размещаем над нижней навигацией */
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-top: 1px solid #dbdbdb;
+    z-index: 100;
+  }
+  
+  .message {
+    max-width: 75%;
+  }
+  
+  .noMessages {
+    height: calc(100vh - 60px - 70px); /* Учитываем навигацию и заголовок */
+  }
+  
+  .noMessagesAvatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .noMessagesContent h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .headerActions {
+    gap: 4px;
+  }
+  
+  .actionButton {
+    padding: 6px;
+  }
+  
+  /* Emoji Picker на мобильных */
+  .emojiPicker {
+    left: 16px;
+    right: 16px;
+    max-height: 150px;
+  }
+  
+  .emojiGrid {
+    grid-template-columns: repeat(8, 1fr);
+    padding: 8px;
+  }
+  
+  .emojiGrid .emojiButton {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    padding: 6px;
+  }
+
+  /* Адаптация изображений для мобильных */
+  .chatImage {
+    max-height: 160px;
+    min-width: 100px;
+    min-height: 60px;
+  }
+
+  .chatImage:hover {
+    transform: scale(1.01);
+  }
+
+  .imageModalClose {
+    top: -30px;
+    right: -30px;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .imageModalContent {
+    max-width: 95vw;
+    max-height: 95vh;
+    padding: 10px;
+  }
+}
+
+/* Emoji Picker */
+.emojiPicker {
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
+  right: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.emojiGrid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  padding: 12px;
+}
+
+.emojiGrid .emojiButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 20px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.emojiGrid .emojiButton:hover {
+  background-color: #f5f5f5;
+}
+
+/* Модальное окно выбора способа загрузки изображения */
+.imageOptionsModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  
+}
+
+.imageOptionsContent {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+ 
+}
+
+.imageOptionsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #0095f6;
+}
+
+.imageOptionsHeader h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+}
+
+.imageOptionsClose {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #8e8e8e;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.imageOptionsClose:hover {
+  background-color: #f2f2f2;
+}
+
+.imageOptionsButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.uploadText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: #262626;
+  margin: 0 0 24px 0;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.imageOptionButton {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 160px;
+}
+
+.imageOptionButton:hover {
+  background-color: #1877f2;
+}
+
+.imageOptionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Модальное окно камеры */
+.cameraModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cameraContent {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cameraHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.cameraHeader h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+}
+
+.cameraClose {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #8e8e8e;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.cameraClose:hover {
+  background-color: #f2f2f2;
+}
+
+.cameraPreview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  min-height: 300px;
+}
+
+.cameraVideo {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.cameraControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.captureButton {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.captureButton:hover {
+  background-color: #1877f2;
+}
+
+.cancelCameraButton {
+  background: none;
+  color: #8e8e8e;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelCameraButton:hover {
+  background-color: #f2f2f2;
+  border-color: #8e8e8e;
+}
+
+/* Мобильная адаптивность для модальных окон */
+@media (max-width: 905px) {
+  .imageOptionsContent {
+    width: 95%;
+    max-width: 400px;
+  }
+  
+  .imageOptionsButtons {
+    padding: 32px 24px;
+    min-height: 250px;
+  }
+  
+  .uploadIcon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+  
+  .uploadText {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .imageOptionButton {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 140px;
+  }
+  
+  .cameraContent {
+    width: 95%;
+    max-width: 500px;
+    max-height: 85vh;
+  }
+  
+  .cameraVideo {
+    max-height: 300px;
+  }
+  
+  .cameraControls {
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .captureButton,
+  .cancelCameraButton {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+} 

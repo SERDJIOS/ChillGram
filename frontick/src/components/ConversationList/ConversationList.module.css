@@ -1,0 +1,396 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+/* Заголовок */
+.header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #0095f6;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #262626;
+  margin: 0;
+}
+
+.newMessageButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  color: #262626;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newMessageButton:hover {
+  background-color: #f2f2f2;
+}
+
+/* Поиск */
+.searchContainer {
+  padding: 24px 24px 16px;
+}
+
+.searchInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #8e8e8e;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  background-color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #262626;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.searchInput:focus {
+  border-color: #0095f6;
+  background-color: #ffffff;
+}
+
+.searchInput::placeholder {
+  color: #8e8e8e;
+}
+
+.clearButton {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  color: #8e8e8e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: #f2f2f2;
+}
+
+/* Результаты поиска */
+.searchResults {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.searchResultsHeader {
+  padding: 16px 24px 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.searchLoading {
+  padding: 20px 24px;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.noResults {
+  padding: 20px 24px;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.searchResultItem:hover {
+  background-color: #f2f2f2;
+}
+
+/* Список чатов */
+.chatsList {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.noChats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  height: 100%;
+}
+
+.noChatsIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.noChatsText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 8px;
+}
+
+.noChatsSubtext {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+/* Поиск пользователей */
+.searchingIndicator {
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.searchingText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.searchSection {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  padding: 16px 24px 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  border-bottom: 1px solid #efefef;
+  margin-bottom: 8px;
+}
+
+.chatItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.chatItem:hover {
+  background-color: #f2f2f2;
+}
+
+.chatItem.selected {
+  background-color: #f2f2f2;
+  border-left-color: #0095f6;
+}
+
+/* Аватары */
+.userAvatarContainer,
+.chatAvatarContainer {
+  position: relative;
+  margin-right: 12px;
+}
+
+.userAvatar,
+.chatAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: #00ba7c;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+/* Информация о пользователе/чате */
+.userInfo,
+.chatInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.username,
+.chatUsername {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 2px;
+}
+
+.fullName {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.chatTime {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #8e8e8e;
+  flex-shrink: 0;
+}
+
+.chatPreview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lastMessage {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lastMessage.unread {
+  color: #262626;
+  font-weight: 600;
+}
+
+.unreadBadge {
+  background-color: #0095f6;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* Скроллбар */
+.searchResults::-webkit-scrollbar,
+.chatsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.searchResults::-webkit-scrollbar-track,
+.chatsList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.searchResults::-webkit-scrollbar-thumb,
+.chatsList::-webkit-scrollbar-thumb {
+  background-color: #c7c7c7;
+  border-radius: 3px;
+}
+
+.searchResults::-webkit-scrollbar-thumb:hover,
+.chatsList::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchResults {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 905px) {
+  .header {
+    padding: 16px 20px 12px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .searchContainer {
+    padding: 20px 20px 12px;
+  }
+  
+  .searchResultItem,
+  .chatItem {
+    padding: 12px 20px;
+  }
+  
+  .userAvatar,
+  .chatAvatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .onlineIndicator {
+    width: 14px;
+    height: 14px;
+  }
+} 

@@ -1,0 +1,256 @@
+.sidebar {
+  width: 245px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #dbdbdb;
+  padding: 8px 12px 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  padding: 5px 5px 5px;
+  margin-bottom: 10px;
+  margin-left: -36px;
+}
+
+.logoImage {
+  width: auto;
+  height: 50px;
+  display: block;
+  margin: 0 auto;
+  background-color: #fff;
+  
+ 
+}
+
+
+.navigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 20px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.navItem:hover {
+  background-color: #f2f2f2;
+  transform: translateX(2px);
+}
+
+.navItem.active {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+.iconContainer {
+  width: 24px;
+  height: 24px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: all 0.2s ease;
+  opacity: 1;
+}
+
+.profileIcon {
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.navItem.active .profileIcon {
+  border-color: #000000;
+}
+
+.labelContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  position: relative;
+}
+
+.label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #000000;
+  font-weight: 400;
+  transition: font-weight 0.2s ease;
+}
+
+.navItem.active .label {
+  font-weight: 600;
+}
+
+/* Уведомления */
+.mobileNotificationBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 10;
+  display: none; /* Скрыто на десктопе */
+}
+
+.desktopNotificationBadge {
+  display: block; /* Показано на десктопе */
+}
+
+/* Анимации для иконок */
+.navItem:hover .icon {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.navItem:active .icon {
+  transform: scale(0.95);
+}
+
+
+
+/* Мобильная версия - нижняя навигация */
+@media (max-width: 905px) {
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    width: 100vw;
+    height: 60px;
+    border-right: none;
+    border-top: 1px solid #dbdbdb;
+    padding: 0;
+    z-index: 9999;
+    background-color: #ffffff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    display: none;
+  }
+  
+  .navigation {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    gap: 0;
+    padding: 0 8px;
+  }
+  
+  .navItem {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 4px;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .navItem:hover {
+    background-color: transparent;
+  }
+  
+  .navItem.active {
+    background-color: transparent;
+  }
+  
+  .label {
+    display: none;
+  }
+  
+  .labelContainer {
+    display: none;
+  }
+  
+  .iconContainer {
+    margin-right: 0;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Показываем мобильные уведомления и скрываем десктопные */
+  .mobileNotificationBadge {
+    display: block;
+  }
+  
+  .desktopNotificationBadge {
+    display: none;
+  }
+  
+  /* Скрываем Explore на мобильных */
+  .navItem[data-item="explore"] {
+    display: none;
+  }
+  
+  /* Profile теперь виден в правом углу */
+  .navItem[data-item="profile"] {
+    order: 10; /* Помещаем в конец */
+  }
+  
+  /* Скрываем логаут на мобильных */
+  .logoutSection {
+    display: none;
+  }
+}
+
+/* Секция логаута */
+.logoutSection {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.logoutItem {
+  color: #000000 !important;
+}
+
+.logoutItem:hover {
+  background-color: #f2f2f2 !important;
+}
+
+.logoutItem .label {
+  color: #000000 !important;
+  font-weight: 400;
+}
+
+.logoutItem .icon {
+  filter: none;
+}
+
+/* Анимации для иконок */
+.navItem:hover .icon {
+  transform: scale(1.05);
+}
+
+.navItem:active .icon {
+  transform: scale(0.95);
+} 

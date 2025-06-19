@@ -1,0 +1,700 @@
+.profilePageContainer {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.content {
+  margin-left: 245px;
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.profileContainer {
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  background-color: #ffffff;
+}
+
+/* Мобильный хедер */
+.mobileHeader {
+  display: none;
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 12px 16px;
+  z-index: 10;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #262626;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #f5f5f5;
+}
+
+.mobileUsername {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+}
+
+.spacer {
+  width: 40px;
+}
+
+/* Шапка профиля */
+.profileHeader {
+  display: flex;
+  margin-bottom: 44px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid #0095f6;
+}
+
+.avatarSection {
+  flex: 0 0 auto;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.avatarContainer {
+  width: 150px;
+  height: 150px;
+  position: relative;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  padding: 3px;
+}
+
+
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+  margin-top: 10px;
+  margin-left: 70px;
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.username {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: #262626;
+  margin: 0;
+  line-height: 32px;
+}
+
+/* Кнопки действий */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.followButton {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 16px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-height: 30px;
+  min-width: 80px;
+}
+
+.followButton.follow {
+  background-color: #0095f6;
+  color: #ffffff;
+}
+
+.followButton.follow:hover {
+  background-color: #1877f2;
+}
+
+.followButton.following {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  color: #262626;
+}
+
+.followButton.following:hover {
+  background-color: #f5f5f5;
+}
+
+.followButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.messageButton {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  color: #262626;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 16px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-height: 30px;
+}
+
+.messageButton:hover {
+  background-color: #f5f5f5;
+}
+
+.stats {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 40px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statNumber {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  line-height: 18px;
+}
+
+.statLabel {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #262626;
+  line-height: 18px;
+}
+
+.bio {
+  max-width: 350px;
+  margin-bottom: 12px;
+}
+
+.fullName {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+
+.bioText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #262626;
+  line-height: 24px;
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+}
+
+.bioLink {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.bioLink a {
+  color: #00376b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bioLink a:hover {
+  text-decoration: underline;
+}
+
+/* Статус взаимной подписки */
+.mutualFollow {
+  margin-top: 8px;
+}
+
+.mutualText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #8e8e8e;
+  background-color: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Сетка постов */
+.postsSection {
+  margin-top: 10px;
+}
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.postItem {
+  position: relative;
+  aspect-ratio: 1;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.postImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+  border-radius: 8px;
+}
+
+.postOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  
+}
+
+.postItem:hover .postOverlay {
+  opacity: 1;
+ 
+}
+
+.postItem:hover .postImage {
+  transform: scale(1.05);
+  
+}
+
+.postStats {
+  display: flex;
+  gap: 20px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.postStat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Индикатор множественных изображений */
+.multipleImagesIndicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.multipleImagesIndicator svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+
+
+.noPosts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.noPostsIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.noPosts p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #8e8e8e;
+  margin: 0;
+}
+
+.noPosts p:first-child {
+  font-size: 22px;
+  font-weight: 300;
+  color: #262626;
+  margin-bottom: 8px;
+}
+
+/* Кликабельные статистики */
+.clickableStat {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.clickableStat:hover {
+  opacity: 0.7;
+}
+
+/* Модальное окно для followers/following */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.followModal {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #0095f6;
+  background: #ffffff;
+}
+
+.modalTitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #8e8e8e;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: #262626;
+}
+
+.modalContent {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.modalEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #8e8e8e;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.usersList {
+  padding: 8px 0;
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.userItem:hover {
+  background-color: #fafafa;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.userAvatar {
+  width: 44px;
+  height: 44px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.userAvatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userAvatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #dbdbdb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.userUsername {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userFullName {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #8e8e8e;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.followButton {
+  background-color: #0095f6;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 16px;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  min-width: 70px;
+}
+
+.followButton:hover {
+  background-color: #1877f2;
+}
+
+.followButton.following {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  color: #262626;
+}
+
+.followButton.following:hover {
+  background-color: #f5f5f5;
+}
+
+.loadMoreContainer {
+  padding: 16px;
+  text-align: center;
+  border-top: 1px solid #efefef;
+}
+
+.loadMoreButton {
+  background-color: #0095f6;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 24px;
+  transition: background-color 0.2s ease;
+}
+
+.loadMoreButton:hover {
+  background-color: #1877f2;
+}
+
+.loadMoreButton:disabled {
+  background-color: #b3b3b3;
+  cursor: not-allowed;
+}
+
+/* Адаптивность */
+@media (max-width: 905px) {
+  .content {
+    margin-left: 0;
+    margin-bottom: 60px;
+  }
+  
+  .mobileHeader {
+    display: flex;
+  }
+  
+  .profileContainer {
+    padding: 20px 16px;
+  }
+  
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+  }
+  
+  .avatarSection {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  
+  .avatarContainer {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .avatarPlaceholder {
+    font-size: 36px;
+  }
+  
+  .profileInfo {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .profileTop {
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .username {
+    font-size: 24px;
+  }
+  
+  .actionButtons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .followButton, .messageButton {
+    flex: 1;
+    max-width: 120px;
+  }
+  
+  .stats {
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 30px;
+  }
+  
+  .bio {
+    max-width: none;
+    text-align: center;
+  }
+  
+  .mutualFollow {
+    text-align: center;
+  }
+  
+  .postsGrid {
+    gap: 10px;
+  }
+  
+  .followModal {
+    width: 90vw;
+    max-height: 70vh;
+  }
+  
+  .modalContent {
+    max-height: 300px;
+  }
+} 

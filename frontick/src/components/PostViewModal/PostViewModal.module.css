@@ -1,0 +1,544 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 8px;
+  max-width: 614px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #f5f5f5;
+  color: #000000;
+}
+
+.closeButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.postCard {
+  width: 100%;
+}
+
+/* Header */
+.postHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #efefef;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profilePic {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.profilePic:hover {
+  opacity: 0.8;
+}
+
+.username {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.username:hover {
+  color: #8e8e8e;
+}
+
+.timestamp {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #8e8e8e;
+}
+
+.moreButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.moreButton:hover {
+  background-color: #f5f5f5;
+}
+
+.moreButton img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Image */
+.imageContainer {
+  position: relative;
+  width: 100%;
+  background-color: #000;
+}
+
+.postImage {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Navigation Buttons */
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.navButton img {
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
+}
+
+.prevButton {
+  left: 16px;
+}
+
+.nextButton {
+  right: 16px;
+}
+
+/* Navigation Buttons for Posts (Instagram style) */
+.postNavButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.postNavButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.postNavButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.postNavButton img {
+  width: 16px;
+  height: 16px;
+  filter: invert(0.3);
+}
+
+.prevPostButton {
+  left: -60px; /* Выносим далеко влево за пределы модального окна */
+}
+
+.nextPostButton {
+  right: -60px; /* Выносим далеко вправо за пределы модального окна */
+}
+
+/* Indicators */
+.indicators {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.indicator.active {
+  background-color: #ffffff;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.leftActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.actionButton:active {
+  transform: scale(0.95);
+}
+
+.actionButton.liked svg path {
+  fill: #ed4956;
+  stroke: #ed4956;
+}
+
+/* Likes */
+.likes {
+  padding: 0 16px 8px 16px;
+}
+
+.likes span {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+}
+
+/* Caption */
+.caption {
+  padding: 0 16px 8px 16px;
+  line-height: 18px;
+}
+
+.caption .username {
+  margin-right: 8px;
+}
+
+.captionText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #262626;
+  word-wrap: break-word;
+}
+
+/* Comments */
+.comments {
+  padding: 0 16px 16px 16px;
+}
+
+.commentsHeader {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.commentsHeader:hover {
+  color: #262626;
+}
+
+.comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.commentContent {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.commentUsername {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.commentUsername:hover {
+  color: #8e8e8e;
+}
+
+.commentText {
+  color: #262626;
+  word-break: break-word;
+}
+
+.deleteCommentButton {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 8px;
+  color: #8e8e8e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.deleteCommentButton:hover {
+  color: #262626;
+  background-color: #f5f5f5;
+}
+
+.deleteCommentButton:focus {
+  outline: none;
+  border: none;
+}
+
+.deleteCommentButton svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Add comment */
+.addComment {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+}
+
+.commentInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #262626;
+  background: transparent;
+}
+
+.commentInput::placeholder {
+  color: #8e8e8e;
+}
+
+.postButton {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.postButton:hover {
+  color: #1877f2;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    max-width: none;
+    margin: 20px;
+  }
+  
+  .closeButton svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .postHeader {
+    padding: 12px;
+  }
+  
+  .headerRight {
+    gap: 8px;
+  }
+  
+  .moreButton {
+    padding: 2px;
+  }
+  
+  .moreButton img {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .actions {
+    padding: 6px 12px;
+  }
+  
+  .likes,
+  .caption,
+  .comments,
+  .addComment {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .navButton {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .navButton img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .prevButton {
+    left: 12px;
+  }
+  
+  .nextButton {
+    right: 12px;
+  }
+  
+  .indicators {
+    bottom: 12px;
+    gap: 6px;
+  }
+  
+  .indicator {
+    width: 6px;
+    height: 6px;
+  }
+  
+  /* Белые стрелки для навигации между постами на мобильных */
+  .prevPostButton {
+    left: -40px; /* На мобильных ближе к краю */
+  }
+  
+  .nextPostButton {
+    right: -40px; /* На мобильных ближе к краю */
+  }
+} 

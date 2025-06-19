@@ -1,0 +1,531 @@
+.videoCallOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.videoCallContainer {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  max-height: 800px;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Заголовок */
+.callHeader {
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.userName {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.callStatus {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Видео контейнер */
+.videoContainer {
+  flex: 1;
+  position: relative;
+  background-color: #000;
+}
+
+.remoteVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.localVideo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: #333;
+}
+
+.videoOffIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.avatarPlaceholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Аудио режим */
+.audioContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.audioAvatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.audioAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Входящий звонок */
+.incomingCallActions {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 80px;
+}
+
+.callButton {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.callButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.callButton:hover::before {
+  transform: translateX(100%);
+}
+
+.acceptButton {
+  background: linear-gradient(135deg, #00ba7c 0%, #00a86b 100%);
+  color: white;
+  animation: pulseGreen 2s infinite;
+}
+
+.acceptButton:hover {
+  background: linear-gradient(135deg, #00d084 0%, #00ba7c 100%);
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(0, 186, 124, 0.4);
+  animation: none;
+}
+
+.declineButton {
+  background: linear-gradient(135deg, #ed4956 0%, #d63447 100%);
+  color: white;
+  animation: pulseRed 2s infinite;
+}
+
+.declineButton:hover {
+  background: linear-gradient(135deg, #f56565 0%, #ed4956 100%);
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(237, 73, 86, 0.4);
+  animation: none;
+}
+
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(0, 186, 124, 0.7);
+  }
+  70% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 10px rgba(0, 186, 124, 0);
+  }
+  100% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(0, 186, 124, 0);
+  }
+}
+
+@keyframes pulseRed {
+  0% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(237, 73, 86, 0.7);
+  }
+  70% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 10px rgba(237, 73, 86, 0);
+  }
+  100% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(237, 73, 86, 0);
+  }
+}
+
+/* Управление звонком */
+.callControls {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.controlButton {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.controlButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.controlButton:hover::before {
+  transform: translateX(100%);
+}
+
+.controlButton:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+.controlButton.active {
+  background-color: #ed4956;
+  box-shadow: 0 4px 16px rgba(237, 73, 86, 0.4);
+}
+
+.controlButton.active:hover {
+  background-color: #f56565;
+}
+
+.endCallButton {
+  background-color: #ed4956;
+  box-shadow: 0 4px 16px rgba(237, 73, 86, 0.4);
+}
+
+.endCallButton:hover {
+  background-color: #f56565;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(237, 73, 86, 0.5);
+}
+
+.endCallButton::before {
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .videoCallContainer {
+    border-radius: 0;
+  }
+
+  .callHeader {
+    padding: 16px;
+  }
+
+  .userAvatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .userName {
+    font-size: 16px;
+  }
+
+  .callStatus {
+    font-size: 12px;
+  }
+
+  .localVideo {
+    width: 120px;
+    height: 90px;
+    top: 80px;
+    right: 16px;
+  }
+
+  .audioAvatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  .incomingCallActions {
+    bottom: 120px;
+    gap: 40px;
+  }
+
+  .callButton {
+    width: 60px;
+    height: 60px;
+  }
+
+  .callControls {
+    bottom: 20px;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .controlButton {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Анимация подключения */
+.connectingDots {
+  display: flex;
+  gap: 4px;
+}
+
+.connectingDots span {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: connectingPulse 1.4s infinite ease-in-out both;
+}
+
+.connectingDots span:nth-child(1) { animation-delay: -0.32s; }
+.connectingDots span:nth-child(2) { animation-delay: -0.16s; }
+.connectingDots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes connectingPulse {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Заглушка удаленного видео */
+.remoteVideoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+}
+
+.remoteAvatarLarge {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Пульсирующее кольцо */
+.pulsingRing {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: pulseRing 2s infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Заглушка для выключенной локальной камеры */
+.localVideoOff {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: 150px;
+  border-radius: 12px;
+  background-color: #333;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Модальное окно подтверждения звонка */
+.confirmModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.confirmContent {
+  background: rgba(40, 40, 40, 0.95);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  min-width: 280px;
+}
+
+.confirmAvatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 20px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.confirmAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.confirmUsername {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.confirmQuestion {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+}
+
+.confirmButton {
+  background: linear-gradient(135deg, #0095f6 0%, #0078d4 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 149, 246, 0.3);
+  min-width: 120px;
+}
+
+.confirmButton:hover {
+  background: linear-gradient(135deg, #1da1f2 0%, #0095f6 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 149, 246, 0.4);
+} 

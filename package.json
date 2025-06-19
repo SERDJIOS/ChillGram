@@ -1,0 +1,18 @@
+{
+  "name": "chillgram",
+  "version": "1.0.0",
+  "description": "ChillGram - Modern Social Media Platform",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontik && npm run dev",
+    "install-all": "npm install && cd backend && npm install && cd ../frontik && npm install",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["chillgram", "social-media", "react", "node", "mongodb"],
+  "author": "SERDJIOS",
+  "license": "MIT"
+} 

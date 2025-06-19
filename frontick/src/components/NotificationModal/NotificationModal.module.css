@@ -1,0 +1,316 @@
+.modal {
+  position: fixed;
+  width: 397px;
+  height: 100vh;
+  left: 244px;
+  top: 0;
+  background: #FFFFFF;
+  border-right: 1px solid #DBDBDB;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border-left: 1px solid #DBDBDB;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #0095f6;
+  background-color: #ffffff;
+}
+
+.title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.markAllButton {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.markAllButton:hover {
+  background-color: rgba(0, 149, 246, 0.1);
+}
+
+.content {
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 0;
+}
+
+
+
+
+
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty h4 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0 0 8px 0;
+}
+
+.empty p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #8e8e8e;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.notificationsList {
+  padding: 0;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative;
+  gap: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.notificationItem:hover {
+  background-color: #fafafa;
+}
+
+.notificationItem.unread {
+  background-color: #f8f9fa;
+}
+
+.notificationItem.unread:hover {
+  background-color: #f0f2f5;
+}
+
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+.typeIcon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.message {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.username {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #262626;
+}
+
+.time {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #8e8e8e;
+}
+
+/* Кнопка Follow back */
+.followButtonContainer {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.followButton {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 80px;
+}
+
+.followButton.follow {
+  background-color: #0095f6;
+  color: #ffffff;
+}
+
+.followButton.follow:hover {
+  background-color: #1877f2;
+}
+
+.followButton.following {
+  background-color: #ffffff;
+  color: #262626;
+  border: 1px solid #dbdbdb;
+}
+
+.followButton.following:hover {
+  background-color: #f5f5f5;
+}
+
+
+
+.postPreview {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.postImage {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+.unreadDot {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #0095f6;
+  border-radius: 50%;
+}
+
+/* Скроллбар */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 905px) {
+  .modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: calc(100vh - 60px); /* Вычитаем высоту sidebar */
+    border-radius: 0;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .header {
+    padding: 16px 20px 12px 20px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .notificationItem {
+    padding: 12px 20px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .postImage {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .followButton {
+    padding: 5px 12px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+  
+  .content {
+    height: calc(100vh - 60px - 80px); /* Вычитаем sidebar и header */
+  }
+} 
