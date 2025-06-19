@@ -1,9 +1,6 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+import { API_CONFIG, getAuthHeaders } from '../config/api.js';
 
-const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`,
-  'Content-Type': 'application/json'
-});
+const API_BASE_URL = API_CONFIG.API_URL;
 
 // API для лайков
 export const likeAPI = {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
+import { API_CONFIG } from '../config/api.js';
 
 const useSocket = () => {
   const socketRef = useRef(null);
@@ -44,7 +45,7 @@ const useSocket = () => {
     // Проверяем валидность токена перед подключением к Socket.IO
     const verifyToken = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/auth/verify-token', {
+        const response = await fetch(`${API_CONFIG.API_URL}/auth/verify-token`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -78,7 +79,7 @@ const useSocket = () => {
       // Creating Socket.IO connection
 
     // Создаем подключение к Socket.io
-    socketRef.current = io('http://localhost:3001', {
+    socketRef.current = io(API_CONFIG.SOCKET_URL, {
       auth: {
         token: token
       },
