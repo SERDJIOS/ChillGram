@@ -7,7 +7,8 @@ const {
   getPostById,
   updatePost,
   deletePost,
-  getFeedPosts
+  getFeedPosts,
+  clearAllPosts
 } = require('../controllers/postController');
 const auth = require('../middlewares/auth');
 
@@ -49,5 +50,8 @@ router.put('/:postId', auth, upload.array('images', 10), updatePost);
 
 // Удаление поста
 router.delete('/:postId', auth, deletePost);
+
+// Очистка всех постов (только для разработки)
+router.delete('/admin/clear-all', auth, clearAllPosts);
 
 module.exports = router; 

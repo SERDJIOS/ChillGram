@@ -394,6 +394,38 @@ const deletePost = async (req, res) => {
   }
 };
 
+// Очистка всех постов (для разработки)
+const clearAllPosts = async (req, res) => {
+  try {
+    // Удаляем все посты
+    await Post.deleteMany({});
+    
+    // Удаляем все лайки
+    await Like.deleteMany({});
+    
+    // Удаляем все комментарии
+    await Comment.deleteMany({});
+    
+    // Сбрасываем счетчики постов у всех пользователей
+    await User.updateMany({}, { postsCount: 0 });
+    
+    console.log('🗑️ All posts cleared from database');
+    
+    res.json({
+      message: 'All posts cleared successfully',
+      cleared: {
+        posts: true,
+        likes: true,
+        comments: true,
+        userPostCounts: true
+      }
+    });
+  } catch (error) {
+    console.error('Error clearing posts:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -401,5 +433,6 @@ module.exports = {
   getPostById,
   updatePost,
   deletePost,
-  getFeedPosts
+  getFeedPosts,
+  clearAllPosts
 }; 
