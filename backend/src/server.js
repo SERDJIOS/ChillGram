@@ -32,7 +32,10 @@ const io = new Server(server, {
       'http://localhost:5002',
       'http://localhost:5173',
       'http://localhost:5174',
-      'http://localhost:5175'
+      'http://localhost:5175',
+      'https://chillgram.vercel.app',
+      'https://chillgram-git-main-serdjios-projects.vercel.app',
+      'https://chillgram-serdjios-projects.vercel.app'
     ],
     methods: ['GET', 'POST'],
     credentials: true
@@ -56,7 +59,10 @@ app.use(cors({
     'http://localhost:5002',
     'http://localhost:5173',
     'http://localhost:5174',
-    'http://localhost:5175'
+    'http://localhost:5175',
+    'https://chillgram.vercel.app',
+    'https://chillgram-git-main-serdjios-projects.vercel.app',
+    'https://chillgram-serdjios-projects.vercel.app'
   ],
   credentials: true
 }));
