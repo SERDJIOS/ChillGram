@@ -526,61 +526,88 @@
   }
   
   .profileHeader {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 30px;
+    flex-direction: row; /* Оставляем горизонтальное расположение как на десктопе */
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
   }
   
   .avatarSection {
-    margin-right: 0;
-    margin-bottom: 20px;
+    margin-right: 16px; /* Уменьшенный отступ */
+    margin-bottom: 0;
   }
   
   .avatarContainer {
-    width: 120px;
-    height: 120px;
+    width: 80px; /* Компактный размер аватара */
+    height: 80px;
   }
   
   .avatarPlaceholder {
-    font-size: 36px;
+    font-size: 24px;
   }
   
   .profileInfo {
     margin-left: 0;
-    width: 100%;
+    margin-top: 0;
+    flex: 1;
+    min-width: 0;
   }
   
   .profileTop {
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 15px;
+    flex-direction: row; /* Горизонтальное расположение */
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
   }
   
   .username {
-    font-size: 24px;
+    font-size: 20px; /* Компактный размер */
+    margin: 0;
   }
   
   .actionButtons {
-    width: 100%;
-    justify-content: center;
+    gap: 6px;
   }
   
   .editButton {
-    flex: 1;
-    max-width: 120px;
+    padding: 4px 12px;
+    font-size: 13px;
+    min-height: 26px;
   }
   
   .stats {
-    justify-content: center;
-    margin-bottom: 15px;
-    gap: 30px;
+    justify-content: flex-start; /* Выравнивание по левому краю */
+    margin-bottom: 12px;
+    gap: 20px; /* Компактные отступы */
+  }
+  
+  .stat {
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .statNumber {
+    font-size: 14px;
+    line-height: 16px;
+  }
+  
+  .statLabel {
+    font-size: 14px;
+    line-height: 16px;
   }
   
   .bio {
-    max-width: none;
-    text-align: center;
+    text-align: left;
+  }
+  
+  .fullName {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  
+  .bioText {
+    font-size: 14px;
+    line-height: 18px;
   }
   
   .postsGrid {

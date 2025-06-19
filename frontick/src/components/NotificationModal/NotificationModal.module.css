@@ -1,3 +1,24 @@
+/* Overlay для затемнения фона */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .modal {
   position: fixed;
   width: 397px;
@@ -63,6 +84,28 @@
   height: calc(100vh - 80px);
   overflow-y: auto;
   padding: 0;
+}
+
+/* Loading состояние */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #0095f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 
@@ -270,6 +313,11 @@
 
 /* Мобильная адаптация */
 @media (max-width: 905px) {
+  .overlay {
+    background-color: transparent; /* Убираем затемнение на мобильных */
+    pointer-events: none; /* Делаем overlay прозрачным для кликов */
+  }
+  
   .modal {
     position: fixed;
     left: 0;
@@ -280,6 +328,7 @@
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    pointer-events: auto; /* Модальное окно остается кликабельным */
   }
   
   .header {

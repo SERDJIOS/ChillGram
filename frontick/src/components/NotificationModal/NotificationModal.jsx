@@ -21,7 +21,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (event.target.classList.contains(styles.overlay)) {
+      // Проверяем, не мобильная ли версия
+      const isMobile = window.innerWidth <= 905
+      
+      // На мобильных не закрываем при клике на overlay
+      if (!isMobile && event.target.classList.contains(styles.overlay)) {
         onClose()
       }
     }

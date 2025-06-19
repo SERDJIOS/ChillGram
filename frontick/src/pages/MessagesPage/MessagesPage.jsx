@@ -4,6 +4,7 @@ import io from 'socket.io-client'
 import ConversationList from '../../components/ConversationList/ConversationList'
 import ChatWindow from '../../components/ChatWindow/ChatWindow'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import StartChatModal from '../../components/StartChatModal/StartChatModal'
 import styles from './MessagesPage.module.css'
 import { API_CONFIG } from '../../config/api.js';
 
@@ -17,6 +18,7 @@ const MessagesPage = () => {
   const [showChatList, setShowChatList] = useState(true)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 905)
   const [error, setError] = useState(null)
+  const [showStartChatModal, setShowStartChatModal] = useState(false)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
@@ -305,6 +307,24 @@ const MessagesPage = () => {
     }
   }
 
+  const handleStartChatWithUser = (user) => {
+    // Создаем объект чата для выбранного пользователя
+    const newChat = {
+      otherUser: user,
+      lastMessage: null,
+      unreadCount: 0
+    }
+    
+    // Выбираем новый чат
+    setSelectedChat(newChat)
+    if (isMobile) {
+      setShowChatList(false)
+    }
+    
+    // Закрываем модальное окно
+    setShowStartChatModal(false)
+  }
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -368,9 +388,7 @@ const MessagesPage = () => {
                 <p>Send private photos and messages to a friend or group.</p>
                 <button 
                   className={styles.sendMessageButton}
-                  onClick={() => {
-                    // Можно добавить логику для открытия поиска пользователей
-                  }}
+                  onClick={() => setShowStartChatModal(true)}
                 >
                   Send Message
                 </button>
@@ -379,6 +397,13 @@ const MessagesPage = () => {
           )}
         </div>
       </div>
+
+      {/* Модальное окно для начала нового чата */}
+      <StartChatModal
+        isOpen={showStartChatModal}
+        onClose={() => setShowStartChatModal(false)}
+        onUserSelect={handleStartChatWithUser}
+      />
     </div>
   )
 }

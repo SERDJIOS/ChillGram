@@ -4,7 +4,7 @@ import axios from 'axios'
 import PostViewModal from '../../components/PostViewModal/PostViewModal'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './OtherProfile.module.css'
-import logoutIcon from '../../assets/nav_icons/logout.svg'
+import sidebarLogo from '../../assets/sidebar.png'
 import { API_CONFIG } from '../../config/api.js';
 
 const OtherProfile = () => {
@@ -174,15 +174,7 @@ const OtherProfile = () => {
     setShowPostModal(false)
   }
 
-  const handleLogout = () => {
-    // Очищаем данные из localStorage
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    localStorage.removeItem('signupEmail')
-    
-    // Перенаправляем на страницу логина
-    navigate('/login')
-  }
+
 
   // Функции для модального окна followers/following
   const openFollowModal = (type) => {
@@ -287,14 +279,8 @@ const OtherProfile = () => {
           >
             ←
           </button>
-          <h2 className={styles.mobileUsername}>{profile.username}</h2>
-          <button 
-            className={styles.mobileLogoutButton}
-            onClick={handleLogout}
-            aria-label="Logout"
-          >
-            <img src={logoutIcon} alt="Logout" className={styles.logoutIcon} />
-          </button>
+          <img src={sidebarLogo} alt="ChillGram" className={styles.mobileLogo} />
+          <div className={styles.spacer}></div>
         </div>
 
         <div className={styles.profileContainer}>
