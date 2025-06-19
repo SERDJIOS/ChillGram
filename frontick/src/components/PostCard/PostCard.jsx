@@ -7,8 +7,10 @@ import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
 import { API_CONFIG } from '../../config/api.js';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
-const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) => {
+const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, isLoading }) => {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [showOptionsModal, setShowOptionsModal] = useState(false);
@@ -16,15 +18,34 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
-  
-  // Используем новые поля из архитектуры ТЗ
+
+  if (isLoading) {
+    return (
+      <div className={styles.postCard}>
+        <div className={styles.postHeader}>
+          <div className={styles.userInfo}>
+            <Skeleton circle width={40} height={40} style={{ marginRight: '10px' }} />
+            <Skeleton width={150} />
+          </div>
+        </div>
+        <Skeleton height={400} />
+        <div className={styles.postActions} style={{ marginTop: '10px' }}>
+          <Skeleton width={80} />
+        </div>
+        <div className={styles.likesCount}>
+          <Skeleton width={100} />
+        </div>
+        <div className={styles.caption} style={{ marginTop: '5px' }}>
+          <Skeleton count={2} />
+        </div>
+      </div>
+    );
+  }
+
   const isLiked = post.isLiked || false;
   const likesCount = post.likesCount || 0;
   const commentsCount = post.commentsCount || 0;
-
   const isOwnPost = currentUserId && post.author?._id === currentUserId;
-
-  // Поддержка множественных изображений
   const images = post.images || (post.image ? [post.image] : []);
   
   const nextImage = () => {
@@ -95,9 +116,7 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
         throw new Error(`Failed to delete comment: ${response.status}`);
       }
 
-      // Обновляем пост после удаления комментария
       if (onComment) {
-        // Перезагружаем комментарии
         const updatedComments = post.comments.filter(comment => comment._id !== commentId);
         onComment(post._id, null, updatedComments);
       }
@@ -122,7 +141,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
   return (
     <>
       <div className={styles.postCard}>
-        {/* Header */}
         <div className={styles.postHeader}>
           <div className={styles.userInfo}>
             <img 
@@ -144,7 +162,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </button>
         </div>
 
-        {/* Images */}
         {images.length > 0 && (
           <div className={styles.imageContainer}>
             <img 
@@ -153,7 +170,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
               className={styles.postImage}
             />
             
-            {/* Navigation arrows */}
             {images.length > 1 && (
               <>
                 <button 
@@ -173,7 +189,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
               </>
             )}
             
-            {/* Indicators */}
             {images.length > 1 && (
               <div className={styles.indicators}>
                 {images.map((_, index) => (
@@ -188,7 +203,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </div>
         )}
 
-        {/* Actions */}
         <div className={styles.postActions}>
           <div className={styles.leftActions}>
             <button 
@@ -209,12 +223,10 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </div>
         </div>
 
-        {/* Likes count */}
         <div className={styles.likesCount}>
           <span>{likesCount} likes</span>
         </div>
 
-        {/* Caption */}
         {post.caption && (
           <div className={styles.caption}>
             <span className={styles.username} onClick={handleUserClick}>{post.author?.username}</span>
@@ -222,7 +234,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </div>
         )}
 
-        {/* Comments preview */}
         {post.comments && post.comments.length > 0 && (
           <div className={styles.commentsPreview}>
             {post.comments.length > 2 && (
@@ -256,7 +267,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </div>
         )}
 
-        {/* Expanded comments */}
         {showComments && post.comments && post.comments.length > 2 && (
           <div className={styles.expandedComments}>
             {post.comments.slice(0, -2).map((comment, index) => (
@@ -282,12 +292,10 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
           </div>
         )}
 
-        {/* Timestamp */}
         <div className={styles.timestamp}>
           {formatDate(post.createdAt)}
         </div>
 
-        {/* Add comment */}
         <form className={styles.addComment} onSubmit={handleComment}>
           <input
             type="text"
@@ -304,7 +312,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
         </form>
       </div>
 
-      {/* Модальные окна */}
       <PostOptionsModal
         isOpen={showOptionsModal}
         onClose={() => setShowOptionsModal(false)}
@@ -329,6 +336,4 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
       />
     </>
   );
-};
-
-export default PostCard; 
+}; 

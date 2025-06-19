@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import PostCard from '../../components/PostCard/PostCard'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import { API_CONFIG } from '../../config/api.js'
 import styles from './FeedPage.module.css'
 import sidebarLogo from '../../assets/sidebar.png'
-import { API_CONFIG } from '../../config/api.js';
 
 const FeedPage = () => {
   const [posts, setPosts] = useState([])
