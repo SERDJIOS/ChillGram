@@ -1,8 +1,8 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001',
-  API_URL: `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'}/api`,
-  SOCKET_URL: import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001'
+  BASE_URL: 'https://chillgram.onrender.com',
+  API_URL: 'https://chillgram.onrender.com/api',
+  SOCKET_URL: 'https://chillgram.onrender.com'
 };
 
 // Helper function to get auth headers
