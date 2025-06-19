@@ -125,7 +125,7 @@ const AuthForm = ({ type = 'login' }) => {
     setApiError('')
 
     try {
-      const endpoint = type === 'login' ? '/api/auth/login' : '/api/auth/register'
+      const endpoint = type === 'login' ? '/auth/login' : '/auth/register'
       const payload = type === 'login' 
         ? { 
             username: formData.username, // может быть email или username
