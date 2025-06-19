@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PostViewModal from '../../components/PostViewModal/PostViewModal';
 import styles from './PostPage.module.css';
+import { API_CONFIG } from '../../config/api.js';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -18,7 +19,7 @@ const PostPage = () => {
   const fetchPost = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:3001/api/posts/${postId}`);
+      const response = await axios.get(`${API_CONFIG.API_URL}/posts/${postId}`);
       setPost(response.data.post);
     } catch (error) {
       console.error('Error fetching post:', error);

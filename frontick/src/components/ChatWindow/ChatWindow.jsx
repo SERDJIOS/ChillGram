@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './ChatWindow.module.css'
 import VideoCall from '../VideoCall/VideoCall'
+import { API_CONFIG } from '../../config/api.js';
 
 const ChatWindow = ({ 
   chat, 
@@ -151,7 +152,7 @@ const ChatWindow = ({
       setLoading(true)
       const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:3001/api/messages/chat/${chat.otherUser._id}`,
+        `${API_CONFIG.API_URL}/messages/chat/${chat.otherUser._id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -210,7 +211,7 @@ const ChatWindow = ({
     try {
       // Отправляем сообщение с base64 изображением напрямую
       const token = localStorage.getItem('token')
-      const messageResponse = await fetch('http://localhost:3001/api/messages/send', {
+      const messageResponse = await fetch('${API_CONFIG.API_URL}/messages/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -459,7 +460,7 @@ const ChatWindow = ({
   const handleDeleteMessage = async (messageId) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/api/messages/${messageId}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/${messageId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -488,7 +489,7 @@ const ChatWindow = ({
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3001/api/messages/${editingMessage}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/${editingMessage}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ConversationList.module.css'
+import { API_CONFIG } from '../../config/api.js';
 
 const ConversationList = ({ 
   conversations, 
@@ -28,7 +29,7 @@ const ConversationList = ({
       setIsSearching(true)
       try {
         const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:3001/api/profile/search/users?q=${encodeURIComponent(searchQuery)}`, {
+        const response = await fetch(`${API_CONFIG.API_URL}/profile/search/users?q=${encodeURIComponent(searchQuery)}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

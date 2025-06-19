@@ -5,6 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import axios from 'axios'
 import styles from './NewPasswordPage.module.css'
 import lockIcon from '../../assets/lock.svg'
+import { API_CONFIG } from '../../config/api.js';
 
 const NewPasswordPage = () => {
   const { token } = useParams()
@@ -46,7 +47,7 @@ const NewPasswordPage = () => {
     setError('')
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/reset-password', {
+      const response = await axios.post('${API_CONFIG.API_URL}/auth/reset-password', {
         token,
         newPassword: password
       })

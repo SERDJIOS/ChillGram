@@ -6,6 +6,7 @@ import EditPostModal from '../EditPostModal/EditPostModal';
 import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
+import { API_CONFIG } from '../../config/api.js';
 
 const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) => {
   const [showComments, setShowComments] = useState(false);
@@ -82,7 +83,7 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId }) 
 
   const handleDeleteComment = async (commentId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

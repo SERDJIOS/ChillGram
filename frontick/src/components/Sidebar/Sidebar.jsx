@@ -22,6 +22,7 @@ import createIcon from '../../assets/nav_icons/create/create.svg'
 import createFillIcon from '../../assets/nav_icons/create/create_fill.svg'
 import profileIcon from '../../assets/default_profile_pic.png'
 import logoutIcon from '../../assets/nav_icons/logout.svg'
+import { API_CONFIG } from '../../config/api.js';
 
 const Sidebar = ({ onPostCreated }) => {
   const navigate = useNavigate()
@@ -63,7 +64,7 @@ const Sidebar = ({ onPostCreated }) => {
       const token = localStorage.getItem('token')
       if (!token) return
 
-      const response = await fetch('http://localhost:3001/api/notifications/unread-count', {
+      const response = await fetch('${API_CONFIG.API_URL}/notifications/unread-count', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -86,7 +87,7 @@ const Sidebar = ({ onPostCreated }) => {
         return
       }
 
-      const response = await fetch('http://localhost:3001/api/messages/unread-count', {
+      const response = await fetch('${API_CONFIG.API_URL}/messages/unread-count', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -213,7 +214,7 @@ const Sidebar = ({ onPostCreated }) => {
       
       formData.append('caption', postData.caption)
 
-      const response = await fetch('http://localhost:3001/api/posts', {
+      const response = await fetch('${API_CONFIG.API_URL}/posts', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

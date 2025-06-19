@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './SearchModal.module.css'
+import { API_CONFIG } from '../../config/api.js';
 
 const SearchModal = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -51,7 +52,7 @@ const SearchModal = ({ isOpen, onClose }) => {
       const token = localStorage.getItem('token')
       if (!token) return
 
-      const response = await fetch(`http://localhost:3001/api/users/search?query=${encodeURIComponent(query)}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/users/search?query=${encodeURIComponent(query)}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

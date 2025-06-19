@@ -5,6 +5,7 @@ import ConversationList from '../../components/ConversationList/ConversationList
 import ChatWindow from '../../components/ChatWindow/ChatWindow'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './MessagesPage.module.css'
+import { API_CONFIG } from '../../config/api.js';
 
 const MessagesPage = () => {
   const [conversations, setConversations] = useState([])
@@ -38,7 +39,7 @@ const MessagesPage = () => {
       }
 
       // Инициализация Socket.IO
-      const newSocket = io('http://localhost:3001', {
+      const newSocket = io('${API_CONFIG.BASE_URL}', {
         auth: {
           token: token
         }
@@ -129,7 +130,7 @@ const MessagesPage = () => {
   const fetchConversations = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3001/api/messages/chats', {
+      const response = await fetch('${API_CONFIG.API_URL}/messages/chats', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -157,7 +158,7 @@ const MessagesPage = () => {
     if (chat.unreadCount > 0) {
       try {
         const token = localStorage.getItem('token')
-        await fetch(`http://localhost:3001/api/messages/read/${chat.otherUser._id}`, {
+        await fetch(`${API_CONFIG.API_URL}/messages/read/${chat.otherUser._id}`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -196,7 +197,7 @@ const MessagesPage = () => {
 
       // Если чата нет, получаем информацию о пользователе и создаем новый чат
       const token = localStorage.getItem('token')
-      const userResponse = await fetch(`http://localhost:3001/api/profile/${userId}`, {
+      const userResponse = await fetch(`${API_CONFIG.API_URL}/profile/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -249,7 +250,7 @@ const MessagesPage = () => {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3001/api/messages/send', {
+      const response = await fetch('${API_CONFIG.API_URL}/messages/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,6 +13,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_CONFIG } from '../../config/api.js'
 import styles from './AuthForm.module.css'
 
 const AuthForm = ({ type = 'login' }) => {
@@ -140,7 +141,7 @@ const AuthForm = ({ type = 'login' }) => {
       // Sending request to endpoint
       // Payload logged
       
-      const response = await axios.post(`http://localhost:3001${endpoint}`, payload)
+              const response = await axios.post(`${API_CONFIG.API_URL}${endpoint}`, payload)
       
       // Response logged
       

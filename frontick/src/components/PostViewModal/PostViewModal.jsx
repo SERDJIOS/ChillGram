@@ -7,6 +7,7 @@ import EditPostModal from '../EditPostModal/EditPostModal';
 import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
+import { API_CONFIG } from '../../config/api.js';
 
 const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostChange, currentUserId, onPostUpdated, onPostDeleted }) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
@@ -129,7 +130,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
       }
 
       // Отправляем запрос на сервер
-      const response = await fetch(`http://localhost:3001/api/likes/${currentPost._id}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/likes/${currentPost._id}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -168,7 +169,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
 
   const handleEditSave = async (postId, newCaption) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/posts/${postId}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/posts/${postId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -204,7 +205,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
 
   const handleDelete = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/posts/${postId}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/posts/${postId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -262,7 +263,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
       }
 
       // Отправляем запрос на сервер
-      const response = await fetch(`http://localhost:3001/api/comments/${currentPost._id}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/comments/${currentPost._id}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -318,7 +319,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
       }
 
       // Отправляем запрос на сервер для удаления комментария
-      const response = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

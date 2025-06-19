@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './SharePostModal.module.css';
+import { API_CONFIG } from '../../config/api.js';
 
 const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
   const [users, setUsers] = useState([]);
@@ -29,7 +30,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       setError('');
       
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3001/api/messages/chats', {
+      const response = await axios.get('${API_CONFIG.API_URL}/messages/chats', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -70,7 +71,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       setError('');
       
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3001/api/profile/search/users', {
+      const response = await axios.get('${API_CONFIG.API_URL}/profile/search/users', {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -96,7 +97,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
   const fetchAllUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3001/api/profile/search/users', {
+      const response = await axios.get('${API_CONFIG.API_URL}/profile/search/users', {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -163,7 +164,7 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
       
       // Отправляем пост каждому выбранному пользователю
       const responses = await Promise.all(selectedUsers.map(user => 
-        axios.post('http://localhost:3001/api/messages/share-post', {
+        axios.post('${API_CONFIG.API_URL}/messages/share-post', {
           recipientId: user.id,
           postId: post._id,
           message: `Shared a post with you`

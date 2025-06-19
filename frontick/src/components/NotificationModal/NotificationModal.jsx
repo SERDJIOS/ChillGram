@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './NotificationModal.module.css'
 import defaultAvatar from '../../assets/default_profile_pic.png'
+import { API_CONFIG } from '../../config/api.js';
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const [notifications, setNotifications] = useState([])
@@ -39,7 +40,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
       setLoading(true)
       const token = localStorage.getItem('token')
       
-      const response = await fetch('http://localhost:3001/api/notifications', {
+      const response = await fetch('${API_CONFIG.API_URL}/notifications', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -66,7 +67,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem('token')
       const statusPromises = followNotifications.map(async (notification) => {
-        const response = await fetch(`http://localhost:3001/api/follow/${notification.sender._id}/status`, {
+        const response = await fetch(`${API_CONFIG.API_URL}/follow/${notification.sender._id}/status`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -107,7 +108,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
       const isCurrentlyFollowing = followingStatus[userId]
       
       if (isCurrentlyFollowing) {
-        await fetch(`http://localhost:3001/api/follow/${userId}/follow`, {
+        await fetch(`${API_CONFIG.API_URL}/follow/${userId}/follow`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -116,7 +117,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
         
         setFollowingStatus(prev => ({ ...prev, [userId]: false }))
       } else {
-        await fetch(`http://localhost:3001/api/follow/${userId}/follow`, {
+        await fetch(`${API_CONFIG.API_URL}/follow/${userId}/follow`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -136,7 +137,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem('token')
       
-      await fetch(`http://localhost:3001/api/notifications/${notificationId}/read`, {
+      await fetch(`${API_CONFIG.API_URL}/notifications/${notificationId}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -161,7 +162,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem('token')
       
-      await fetch('http://localhost:3001/api/notifications/read-all', {
+      await fetch('${API_CONFIG.API_URL}/notifications/read-all', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

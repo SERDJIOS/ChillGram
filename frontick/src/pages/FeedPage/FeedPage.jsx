@@ -4,6 +4,7 @@ import PostCard from '../../components/PostCard/PostCard'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './FeedPage.module.css'
 import sidebarLogo from '../../assets/sidebar.png'
+import { API_CONFIG } from '../../config/api.js';
 
 const FeedPage = () => {
   const [posts, setPosts] = useState([])
@@ -21,7 +22,7 @@ const FeedPage = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.get('http://localhost:3001/api/posts', {
+      const response = await axios.get('${API_CONFIG.API_URL}/posts', {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       
@@ -70,7 +71,7 @@ const FeedPage = () => {
 
       // Затем отправляем запрос на сервер
       await axios.post(
-        `http://localhost:3001/api/likes/${postId}`,
+        `${API_CONFIG.API_URL}/likes/${postId}`,
         {},
         {
           headers: {
@@ -140,7 +141,7 @@ const FeedPage = () => {
 
       // Затем отправляем запрос на сервер
       const response = await axios.post(
-        `http://localhost:3001/api/comments/${postId}`,
+        `${API_CONFIG.API_URL}/comments/${postId}`,
         { text: commentText },
         {
           headers: {
@@ -194,7 +195,7 @@ const FeedPage = () => {
 
       // Затем отправляем запрос на сервер
       await axios.put(
-        `http://localhost:3001/api/posts/${postId}`,
+        `${API_CONFIG.API_URL}/posts/${postId}`,
         { caption: newCaption },
         {
           headers: {
@@ -225,7 +226,7 @@ const FeedPage = () => {
 
       // Затем отправляем запрос на сервер
       await axios.delete(
-        `http://localhost:3001/api/posts/${postId}`,
+        `${API_CONFIG.API_URL}/posts/${postId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`

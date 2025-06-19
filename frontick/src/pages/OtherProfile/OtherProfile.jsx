@@ -5,6 +5,7 @@ import PostViewModal from '../../components/PostViewModal/PostViewModal'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './OtherProfile.module.css'
 import logoutIcon from '../../assets/nav_icons/logout.svg'
+import { API_CONFIG } from '../../config/api.js';
 
 const OtherProfile = () => {
   const { userId } = useParams()
@@ -47,7 +48,7 @@ const OtherProfile = () => {
     try {
       const token = localStorage.getItem('token')
       
-      const response = await axios.get(`http://localhost:3001/api/profile/${userId}`, {
+      const response = await axios.get(`${API_CONFIG.API_URL}/profile/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -63,7 +64,7 @@ const OtherProfile = () => {
     try {
       const token = localStorage.getItem('token')
       
-      const response = await axios.get(`http://localhost:3001/api/follow/${userId}/status`, {
+      const response = await axios.get(`${API_CONFIG.API_URL}/follow/${userId}/status`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -79,7 +80,7 @@ const OtherProfile = () => {
     try {
       const token = localStorage.getItem('token')
       
-      const response = await axios.get(`http://localhost:3001/api/posts/user/${userId}`, {
+      const response = await axios.get(`${API_CONFIG.API_URL}/posts/user/${userId}`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       
@@ -97,7 +98,7 @@ const OtherProfile = () => {
       
       if (followStatus.isFollowing) {
         // Отписаться
-        await axios.delete(`http://localhost:3001/api/follow/${userId}/follow`, {
+        await axios.delete(`${API_CONFIG.API_URL}/follow/${userId}/follow`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -117,7 +118,7 @@ const OtherProfile = () => {
         
       } else {
         // Подписаться
-        await axios.post(`http://localhost:3001/api/follow/${userId}/follow`, {}, {
+        await axios.post(`${API_CONFIG.API_URL}/follow/${userId}/follow`, {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -205,7 +206,7 @@ const OtherProfile = () => {
       const endpoint = type === 'followers' ? 'followers' : 'following'
       
       const response = await axios.get(
-        `http://localhost:3001/api/follow/${userId}/${endpoint}?page=${pageNum}&limit=20`,
+        `${API_CONFIG.API_URL}/follow/${userId}/${endpoint}?page=${pageNum}&limit=20`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -234,13 +235,13 @@ const OtherProfile = () => {
       const token = localStorage.getItem('token')
       
       if (isCurrentlyFollowing) {
-        await axios.delete(`http://localhost:3001/api/follow/${targetUserId}/follow`, {
+        await axios.delete(`${API_CONFIG.API_URL}/follow/${targetUserId}/follow`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
       } else {
-        await axios.post(`http://localhost:3001/api/follow/${targetUserId}/follow`, {}, {
+        await axios.post(`${API_CONFIG.API_URL}/follow/${targetUserId}/follow`, {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }

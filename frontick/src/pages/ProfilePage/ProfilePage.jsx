@@ -7,6 +7,7 @@ import styles from './ProfilePage.module.css'
 import logoutIcon from '../../assets/nav_icons/logout.svg'
 import sidebarLogo from '../../assets/sidebar.png'
 import DefaultProfilePic from '../../assets/default_profile_pic.png'
+import { API_CONFIG } from '../../config/api.js';
 
 const ProfilePage = () => {
   const { userId } = useParams()
@@ -71,7 +72,7 @@ const ProfilePage = () => {
       }
       
       // Всегда получаем собственный профиль
-      const response = await axios.get('http://localhost:3001/api/profile', {
+      const response = await axios.get('${API_CONFIG.API_URL}/profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -95,7 +96,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem('token')
       
-      const response = await axios.get(`http://localhost:3001/api/posts/user/${profile.id}`, {
+      const response = await axios.get(`${API_CONFIG.API_URL}/posts/user/${profile.id}`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       
@@ -185,7 +186,7 @@ const ProfilePage = () => {
       }
 
       const endpoint = type === 'followers' ? 'followers' : 'following'
-      const url = `http://localhost:3001/api/follow/${userId}/${endpoint}?page=${pageNum}&limit=20`
+      const url = `${API_CONFIG.API_URL}/follow/${userId}/${endpoint}?page=${pageNum}&limit=20`
 
       const response = await fetch(url, {
         headers: {
@@ -218,7 +219,7 @@ const ProfilePage = () => {
       if (!token) return
 
       const method = isCurrentlyFollowing ? 'DELETE' : 'POST'
-      const response = await fetch(`http://localhost:3001/api/follow/${targetUserId}/follow`, {
+      const response = await fetch(`${API_CONFIG.API_URL}/follow/${targetUserId}/follow`, {
         method,
         headers: {
           'Authorization': `Bearer ${token}`

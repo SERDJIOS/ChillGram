@@ -4,6 +4,7 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import DefaultProfilePic from '../../assets/default_profile_pic.png'
 import styles from './EditProfilePage.module.css'
 import axios from 'axios'
+import { API_CONFIG } from '../../config/api.js';
 
 const EditProfilePage = () => {
   const navigate = useNavigate()
@@ -29,7 +30,7 @@ const EditProfilePage = () => {
       setLoading(true)
       const token = localStorage.getItem('token')
       
-      const response = await axios.get('http://localhost:3001/api/profile', {
+      const response = await axios.get('${API_CONFIG.API_URL}/profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -90,7 +91,7 @@ const EditProfilePage = () => {
         formData.append('website', profile.website)
         formData.append('profileImage', imageFile)
 
-        response = await axios.put('http://localhost:3001/api/profile', formData, {
+        response = await axios.put('${API_CONFIG.API_URL}/profile', formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -105,7 +106,7 @@ const EditProfilePage = () => {
           website: profile.website
         }
 
-        response = await axios.put('http://localhost:3001/api/profile', updateData, {
+        response = await axios.put('${API_CONFIG.API_URL}/profile', updateData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'

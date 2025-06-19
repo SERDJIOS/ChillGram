@@ -4,6 +4,7 @@ import { TextField, Button, Box, Alert } from '@mui/material'
 import axios from 'axios'
 import styles from './ResetPasswordPage.module.css'
 import lockIcon from '../../assets/lock.svg'
+import { API_CONFIG } from '../../config/api.js';
 
 const ResetPasswordPage = () => {
   const [email, setEmail] = useState('')
@@ -25,7 +26,7 @@ const ResetPasswordPage = () => {
     setMessage('')
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/forgot-password', {
+      const response = await axios.post('${API_CONFIG.API_URL}/auth/forgot-password', {
         email: email.trim()
       })
 
