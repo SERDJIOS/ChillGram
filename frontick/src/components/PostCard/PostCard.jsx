@@ -336,4 +336,6 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
       />
     </>
   );
-}; 
+};
+
+export default PostCard; 
