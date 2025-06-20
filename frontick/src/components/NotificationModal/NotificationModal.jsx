@@ -209,23 +209,36 @@ const NotificationModal = ({ isOpen, onClose }) => {
   }
 
   const formatTime = (dateString) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffMinutes = Math.floor(diffTime / (1000 * 60));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffInHours < 1) {
-      const diffInMinutes = Math.floor((now - date) / (1000 * 60))
-      return diffInMinutes < 1 ? 'now' : `${diffInMinutes}m`
-    } else if (diffInHours < 24) {
-      return `${diffInHours}h`
-    } else {
-      const diffInDays = Math.floor(diffInHours / 24)
-      if (diffInDays < 7) {
-        return `${diffInDays}d`
-      } else {
-        return date.toLocaleDateString()
-      }
+    // Менее часа - показываем минуты
+    if (diffMinutes < 60) {
+      if (diffMinutes === 0) return 'Just now';
+      return `${diffMinutes}m`;
     }
+    
+    // Менее суток - показываем часы
+    if (diffHours < 24) {
+      return `${diffHours}h`;
+    }
+    
+    // Менее недели - показываем дни
+    if (diffDays < 7) {
+      return `${diffDays}d`;
+    }
+    
+    // Более недели - показываем полную дату
+    const options = { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    };
+    return date.toLocaleDateString('en-US', options);
   }
 
   const getNotificationIcon = (type) => {

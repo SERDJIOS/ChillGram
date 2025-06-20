@@ -366,39 +366,68 @@ const OtherProfile = () => {
           <div className={styles.postsSection}>
             {!postsLoaded ? null : posts.length > 0 ? (
               <div className={styles.postsGrid}>
-                {posts.map((post) => (
-                  <div 
-                    key={post._id} 
-                    className={styles.postItem}
-                    onClick={() => handlePostClick(post)}
-                  >
-                    <img 
-                      src={post.images?.[0] || post.image} 
-                      alt={post.caption || 'Post'} 
-                      className={styles.postImage}
-                    />
-                    {/* Индикатор множественных изображений */}
-                    {post.images && post.images.length > 1 && (
-                      <div className={styles.multipleImagesIndicator}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                          <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v10H7V7zm2 2v6h6V9H9z"/>
-                        </svg>
-                      </div>
-                    )}
-                    <div className={styles.postOverlay}>
-                      <div className={styles.postStats}>
-                        <div className={styles.postStat}>
-                          <img src={IconHeart} alt="Likes" className={styles.statIcon} />
-                          <span>{post.likesCount || 0}</span>
+                {posts.map((post) => {
+                  const firstMedia = post.images?.[0] || post.image;
+                  const isVideo = firstMedia && (
+                    firstMedia.includes('.mp4') || 
+                    firstMedia.includes('.webm') || 
+                    firstMedia.includes('.mov') || 
+                    firstMedia.includes('video/upload/') || 
+                    firstMedia.includes('resource_type/video')
+                  );
+                  
+                  return (
+                    <div 
+                      key={post._id} 
+                      className={styles.postItem}
+                      onClick={() => handlePostClick(post)}
+                    >
+                      {isVideo ? (
+                        <video 
+                          src={firstMedia} 
+                          alt={post.caption || 'Post'} 
+                          className={styles.postImage}
+                          muted
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img 
+                          src={firstMedia} 
+                          alt={post.caption || 'Post'} 
+                          className={styles.postImage}
+                        />
+                      )}
+                      {/* Индикатор множественных изображений */}
+                      {post.images && post.images.length > 1 && (
+                        <div className={styles.multipleImagesIndicator}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                            <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v10H7V7zm2 2v6h6V9H9z"/>
+                          </svg>
                         </div>
-                        <div className={styles.postStat}>
-                          <img src={IconComment} alt="Comments" className={styles.statIcon} />
-                          <span>{post.commentsCount || 0}</span>
+                      )}
+                      {/* Индикатор видео */}
+                      {isVideo && (
+                        <div className={styles.videoIndicator}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                      )}
+                      <div className={styles.postOverlay}>
+                        <div className={styles.postStats}>
+                          <div className={styles.postStat}>
+                            <img src={IconHeart} alt="Likes" className={styles.statIcon} />
+                            <span>{post.likesCount || 0}</span>
+                          </div>
+                          <div className={styles.postStat}>
+                            <img src={IconComment} alt="Comments" className={styles.statIcon} />
+                            <span>{post.commentsCount || 0}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className={styles.noPosts}>

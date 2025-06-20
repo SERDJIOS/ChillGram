@@ -140,12 +140,35 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffMinutes = Math.floor(diffTime / (1000 * 60));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
+    // Менее часа - показываем минуты
+    if (diffMinutes < 60) {
+      if (diffMinutes === 0) return 'Just now';
+      return `${diffMinutes}m ago`;
+    }
+    
+    // Менее суток - показываем часы
+    if (diffHours < 24) {
+      return `${diffHours}h ago`;
+    }
+    
+    // Менее недели - показываем дни
+    if (diffDays < 7) {
+      return `${diffDays}d ago`;
+    }
+    
+    // Более недели - показываем полную дату
+    const options = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    return date.toLocaleDateString('en-US', options);
   };
 
   return (

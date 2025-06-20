@@ -356,14 +356,34 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+    const diffTime = Math.abs(now - date);
+    const diffMinutes = Math.floor(diffTime / (1000 * 60));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffInHours < 24) {
-      return `${diffInHours}h`;
-    } else {
-      const diffInDays = Math.floor(diffInHours / 24);
-      return `${diffInDays}d`;
+    // Менее часа - показываем минуты
+    if (diffMinutes < 60) {
+      if (diffMinutes === 0) return 'Just now';
+      return `${diffMinutes}m`;
     }
+    
+    // Менее суток - показываем часы
+    if (diffHours < 24) {
+      return `${diffHours}h`;
+    }
+    
+    // Менее недели - показываем дни
+    if (diffDays < 7) {
+      return `${diffDays}d`;
+    }
+    
+    // Более недели - показываем полную дату
+    const options = { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    };
+    return date.toLocaleDateString('en-US', options);
   };
 
   return (
