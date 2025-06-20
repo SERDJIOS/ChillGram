@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "chillgram-frontend",
   "builds": [
     {
       "src": "frontick/package.json",
@@ -11,6 +10,10 @@
     }
   ],
   "routes": [
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.png"
+    },
     {
       "handle": "filesystem"
     },
