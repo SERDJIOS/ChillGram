@@ -377,19 +377,9 @@ const ProfilePage = () => {
                               className={styles.postImage}
                               muted
                               loop
+                              autoPlay
                               preload="metadata"
                               playsInline
-                              onMouseEnter={(e) => {
-                                e.target.play().catch(() => {});
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.pause();
-                                e.target.currentTime = 0;
-                              }}
-                              onTouchStart={(e) => {
-                                // На мобильных устройствах начинаем воспроизведение при касании
-                                e.target.play().catch(() => {});
-                              }}
                             />
                           ) : (
                             <img 
