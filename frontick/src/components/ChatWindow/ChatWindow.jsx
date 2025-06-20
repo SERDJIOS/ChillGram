@@ -26,7 +26,6 @@ const ChatWindow = ({
   const [showVideoCall, setShowVideoCall] = useState(false)
   const [showVoiceCall, setShowVoiceCall] = useState(false)
   const [isIncomingCall, setIsIncomingCall] = useState(false)
-  const [callType, setCallType] = useState('video') // 'video' или 'audio'
   const [showCamera, setShowCamera] = useState(false)
   const [stream, setStream] = useState(null)
   const [showImageOptions, setShowImageOptions] = useState(false)
@@ -126,9 +125,6 @@ const ChatWindow = ({
       }
       if (showMessageMenu && !event.target.closest('.message-menu-container')) {
         setShowMessageMenu(null)
-      }
-      if (showCameraButton && !event.target.closest('.mobileRecordingButtons')) {
-        setShowCameraButton(false)
       }
     }
 
@@ -281,30 +277,16 @@ const ChatWindow = ({
     setShowImageOptions(false)
   }
 
-  const handleTakePhoto = () => {
+  const handleTakePhotoVideo = () => {
     setShowImageOptions(false)
     if (isMobileDevice()) {
-      // На мобильных устройствах открываем нативную камеру для фото
-      const photoInput = document.getElementById('photoInput')
-      if (photoInput) {
-        photoInput.click()
+      // На мобильных устройствах открываем нативную камеру для фото и видео
+      const cameraInput = document.getElementById('cameraInput')
+      if (cameraInput) {
+        cameraInput.click()
       }
     } else {
       // На десктопе используем веб-камеру
-      openCamera()
-    }
-  }
-
-  const handleTakeVideo = () => {
-    setShowImageOptions(false)
-    if (isMobileDevice()) {
-      // На мобильных устройствах открываем нативную камеру для видео
-      const videoInput = document.getElementById('videoInput')
-      if (videoInput) {
-        videoInput.click()
-      }
-    } else {
-      // На десктопе используем веб-камеру (можно расширить для видео)
       openCamera()
     }
   }
@@ -422,13 +404,11 @@ const ChatWindow = ({
   }
 
   const handleVideoCall = () => {
-    setCallType('video')
     setIsIncomingCall(false)
     setShowVideoCall(true)
   }
 
   const handleVoiceCall = () => {
-    setCallType('audio')
     setIsIncomingCall(false)
     setShowVoiceCall(true)
   }
@@ -1244,83 +1224,16 @@ const ChatWindow = ({
                       </svg>
                     )}
                   </button>
-                ) : isVoiceRecorded ? (
-                  // Показываем кнопки для записанного голосового сообщения
-                  <div className={styles.recordedMessageButtons}>
-                    <button 
-                      type="button" 
-                      className={styles.deleteRecordedButton} 
-                      onClick={deleteRecordedMessage}
-                      title="Delete recording"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </button>
-                    <button 
-                      type="button" 
-                      className={styles.sendRecordedButton} 
-                      onClick={sendRecordedVoice}
-                      title="Send voice message"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
-                      </svg>
-                    </button>
-                  </div>
-                ) : isVideoRecorded ? (
-                  // Показываем кнопки для записанного видеосообщения
-                  <div className={styles.recordedMessageButtons}>
-                    <button 
-                      type="button" 
-                      className={styles.deleteRecordedButton} 
-                      onClick={deleteRecordedMessage}
-                      title="Delete recording"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </button>
-                    <button 
-                      type="button" 
-                      className={styles.sendRecordedButton} 
-                      onClick={sendRecordedVideo}
-                      title="Send video message"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
-                      </svg>
-                    </button>
-                  </div>
                 ) : (
                   // Показываем микрофон и камеру
                   <div className={styles.mobileRecordingButtons}>
-                    {showCameraButton && (
-                      <button 
-                        type="button" 
-                        className={styles.mobileCameraButton} 
-                        title="Record video message"
-                        onTouchStart={startVideoRecordingMobile}
-                        onTouchEnd={stopRecording}
-                        onMouseDown={startVideoRecordingMobile}
-                        onMouseUp={stopRecording}
-                        disabled={isRecordingVoice || isRecordingVideo}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                          <circle cx="12" cy="12" r="3" fill="currentColor"/>
-                        </svg>
-                      </button>
-                    )}
-                    
                     <button 
                       type="button" 
                       className={styles.mobileMicButton} 
                       title="Record voice message"
-                      onClick={handleMicrophoneClick}
-                      onTouchStart={startVoiceRecordingMobile}
+                      onTouchStart={startVoiceRecording}
                       onTouchEnd={stopRecording}
-                      onMouseDown={startVoiceRecordingMobile}
+                      onMouseDown={startVoiceRecording}
                       onMouseUp={stopRecording}
                       disabled={isRecordingVideo}
                     >
@@ -1401,21 +1314,11 @@ const ChatWindow = ({
           style={{ display: 'none' }}
         />
         
-        {/* Скрытый input для фото с камеры */}
+        {/* Скрытый input для камеры (фото и видео) */}
         <input
-          id="photoInput"
+          id="cameraInput"
           type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleCameraCapture}
-          style={{ display: 'none' }}
-        />
-        
-        {/* Скрытый input для видео с камеры */}
-        <input
-          id="videoInput"
-          type="file"
-          accept="video/*"
+          accept="image/*,video/*"
           capture="environment"
           onChange={handleCameraCapture}
           style={{ display: 'none' }}
@@ -1473,15 +1376,9 @@ const ChatWindow = ({
                 </button>
                 <button 
                   className={styles.imageOptionButton}
-                  onClick={handleTakePhoto}
+                  onClick={handleTakePhotoVideo}
                 >
-                  Take Photo
-                </button>
-                <button 
-                  className={styles.imageOptionButton}
-                  onClick={handleTakeVideo}
-                >
-                  Video
+                  Take Photo/Video
                 </button>
               </div>
             </div>
