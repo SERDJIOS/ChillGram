@@ -15,6 +15,13 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
 
+  // Функция для проверки мобильного устройства
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           ('ontouchstart' in window) ||
+           (navigator.maxTouchPoints > 0);
+  };
+
   // Cleanup camera stream when modal closes
   useEffect(() => {
     if (!isOpen) {
@@ -74,28 +81,35 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
 
   const openCamera = async () => {
     try {
-      // Сначала пробуем мобильный подход (input с capture)
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        // Используем getUserMedia для десктопа и мобильных устройств
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment' // Предпочитаем заднюю камеру на мобильных
-          }
-        })
-        
-        setStream(mediaStream)
-        setShowCamera(true)
-        
-        // Ждем, пока видео элемент будет готов
-        setTimeout(() => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = mediaStream
-            videoRef.current.play()
-          }
-        }, 100)
-      } else {
-        // Fallback для старых браузеров - используем input с capture
+      // Проверяем, мобильное ли это устройство
+      const isMobile = isMobileDevice()
+      
+      if (isMobile) {
+        // На мобильных устройствах сразу открываем нативную камеру
         document.getElementById('cameraInput').click()
+      } else {
+        // На десктопе используем getUserMedia для веб-камеры
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'environment' // Предпочитаем заднюю камеру
+            }
+          })
+          
+          setStream(mediaStream)
+          setShowCamera(true)
+          
+          // Ждем, пока видео элемент будет готов
+          setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.srcObject = mediaStream
+              videoRef.current.play()
+            }
+          }, 100)
+        } else {
+          // Fallback - используем input с capture
+          document.getElementById('cameraInput').click()
+        }
       }
     } catch (error) {
       console.error('Error accessing camera:', error)
@@ -103,6 +117,14 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
       // Fallback - открываем обычный выбор файла
       document.getElementById('cameraInput').click()
     }
+  }
+
+  const openCameraPhoto = () => {
+    document.getElementById('cameraPhotoInput').click()
+  }
+
+  const openCameraVideo = () => {
+    document.getElementById('cameraVideoInput').click()
   }
 
   const capturePhoto = () => {
@@ -345,14 +367,37 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                   >
                     Select from computer
                   </button>
-                  <button 
-                    type="button"
-                    className={styles.cameraButton}
-                    onClick={openCamera}
-                    disabled={isLoading}
-                  >
-                    Take photo/video
-                  </button>
+                  
+                  {/* Проверяем, мобильное ли устройство */}
+                  {isMobileDevice() ? (
+                    <>
+                      <button 
+                        type="button"
+                        className={styles.cameraButton}
+                        onClick={openCameraPhoto}
+                        disabled={isLoading}
+                      >
+                        📷 Take Photo
+                      </button>
+                      <button 
+                        type="button"
+                        className={styles.cameraButton}
+                        onClick={openCameraVideo}
+                        disabled={isLoading}
+                      >
+                        🎥 Record Video
+                      </button>
+                    </>
+                  ) : (
+                    <button 
+                      type="button"
+                      className={styles.cameraButton}
+                      onClick={openCamera}
+                      disabled={isLoading}
+                    >
+                      Take photo/video
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -370,6 +415,25 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
               id="cameraInput"
               type="file"
               accept="image/*,video/*"
+              capture="environment"
+              onChange={handleCameraCapture}
+              className={styles.fileInput}
+            />
+            
+            {/* Отдельные input для фото и видео на мобильных */}
+            <input
+              id="cameraPhotoInput"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleCameraCapture}
+              className={styles.fileInput}
+            />
+            
+            <input
+              id="cameraVideoInput"
+              type="file"
+              accept="video/*"
               capture="environment"
               onChange={handleCameraCapture}
               className={styles.fileInput}

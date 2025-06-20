@@ -533,14 +533,19 @@ video.previewImage {
   }
   
   .buttonGroup {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
   }
   
   .selectButton,
   .cameraButton {
-    min-width: 140px;
-    padding: 10px 16px;
-    font-size: 16px;
+    min-width: 120px;
+    padding: 10px 12px;
+    font-size: 14px;
+    flex: 1;
+    max-width: 140px;
   }
   
   .cameraVideo {
