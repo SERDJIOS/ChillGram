@@ -99,6 +99,11 @@ video.postImage {
   background-color: #000000;
 }
 
+/* Интерактивность для видео */
+.postImage:is(video) {
+  cursor: pointer;
+}
+
 /* Navigation Buttons */
 .navButton {
   position: absolute;
@@ -459,5 +464,12 @@ video.postImage {
   .indicator {
     width: 6px;
     height: 6px;
+  }
+  
+  /* Мобильные стили для видео */
+  .postImage:is(video) {
+    /* На мобильных устройствах видео будет автоматически воспроизводиться при касании */
+    -webkit-playsinline: true;
+    playsinline: true;
   }
 } 

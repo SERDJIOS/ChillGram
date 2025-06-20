@@ -201,10 +201,21 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
               <video 
                 src={images[currentImageIndex]} 
                 className={styles.postImage}
-                controls
                 muted
-                autoPlay={false}
+                loop
                 preload="metadata"
+                playsInline
+                onMouseEnter={(e) => {
+                  e.target.play().catch(() => {});
+                }}
+                onMouseLeave={(e) => {
+                  e.target.pause();
+                  e.target.currentTime = 0;
+                }}
+                onTouchStart={(e) => {
+                  // На мобильных устройствах начинаем воспроизведение при касании
+                  e.target.play().catch(() => {});
+                }}
               />
             ) : (
               <img 
