@@ -8,6 +8,8 @@ import logoutIcon from '../../assets/nav_icons/logout.svg'
 import sidebarLogo from '../../assets/sidebar.png'
 import DefaultProfilePic from '../../assets/default_profile_pic.png'
 import { API_CONFIG } from '../../config/api.js';
+import IconHeart from '../../assets/reactions/like.svg'
+import IconComment from '../../assets/reactions/comment.svg'
 
 const ProfilePage = () => {
   const { userId } = useParams()
@@ -366,10 +368,12 @@ const ProfilePage = () => {
                         <div className={styles.postOverlay}>
                           <div className={styles.postStats}>
                             <div className={styles.postStat}>
-                              <span>❤️ {post.likesCount || 0}</span>
+                              <img src={IconHeart} alt="Likes" className={styles.statIcon} />
+                              <span>{post.likesCount || 0}</span>
                             </div>
                             <div className={styles.postStat}>
-                              <span>💬 {post.commentsCount || 0}</span>
+                              <img src={IconComment} alt="Comments" className={styles.statIcon} />
+                              <span>{post.commentsCount || 0}</span>
                             </div>
                           </div>
                         </div>

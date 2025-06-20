@@ -6,6 +6,8 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './OtherProfile.module.css'
 import sidebarLogo from '../../assets/sidebar.png'
 import { API_CONFIG } from '../../config/api.js';
+import IconHeart from '../../assets/reactions/like.svg'
+import IconComment from '../../assets/reactions/comment.svg'
 
 const OtherProfile = () => {
   const { userId } = useParams()
@@ -391,10 +393,12 @@ const OtherProfile = () => {
                     <div className={styles.postOverlay}>
                       <div className={styles.postStats}>
                         <div className={styles.postStat}>
-                          <span>❤️ {post.likesCount || 0}</span>
+                          <img src="/src/assets/reactions/like.svg" alt="Likes" className={styles.statIcon} />
+                          <span>{post.likesCount || 0}</span>
                         </div>
                         <div className={styles.postStat}>
-                          <span>💬 {post.commentsCount || 0}</span>
+                          <img src="/src/assets/reactions/comment.svg" alt="Comments" className={styles.statIcon} />
+                          <span>{post.commentsCount || 0}</span>
                         </div>
                       </div>
                     </div>
