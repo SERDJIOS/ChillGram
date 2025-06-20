@@ -119,14 +119,6 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
     }
   }
 
-  const openCameraPhoto = () => {
-    document.getElementById('cameraPhotoInput').click()
-  }
-
-  const openCameraVideo = () => {
-    document.getElementById('cameraVideoInput').click()
-  }
-
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current
@@ -359,44 +351,45 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                 <div className={styles.uploadIcon}>📷</div>
                 <p className={styles.uploadText}>Drag photos and videos here</p>
                 <div className={styles.buttonGroup}>
-                  <button 
-                    type="button"
-                    className={styles.selectButton}
-                    onClick={() => document.getElementById('imageInput').click()}
-                    disabled={isLoading}
-                  >
-                    Select from computer
-                  </button>
-                  
                   {/* Проверяем, мобильное ли устройство */}
                   {isMobileDevice() ? (
                     <>
                       <button 
                         type="button"
-                        className={styles.cameraButton}
-                        onClick={openCameraPhoto}
+                        className={styles.selectButton}
+                        onClick={() => document.getElementById('imageInput').click()}
                         disabled={isLoading}
                       >
-                        📷 Take Photo
+                        Select from computer
                       </button>
                       <button 
                         type="button"
                         className={styles.cameraButton}
-                        onClick={openCameraVideo}
+                        onClick={openCamera}
                         disabled={isLoading}
                       >
-                        🎥 Record Video
+                        📷 Take Photo/Video
                       </button>
                     </>
                   ) : (
-                    <button 
-                      type="button"
-                      className={styles.cameraButton}
-                      onClick={openCamera}
-                      disabled={isLoading}
-                    >
-                      Take photo/video
-                    </button>
+                    <>
+                      <button 
+                        type="button"
+                        className={styles.selectButton}
+                        onClick={() => document.getElementById('imageInput').click()}
+                        disabled={isLoading}
+                      >
+                        Select from computer
+                      </button>
+                      <button 
+                        type="button"
+                        className={styles.cameraButton}
+                        onClick={openCamera}
+                        disabled={isLoading}
+                      >
+                        Take photo/video
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
@@ -415,25 +408,6 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
               id="cameraInput"
               type="file"
               accept="image/*,video/*"
-              capture="environment"
-              onChange={handleCameraCapture}
-              className={styles.fileInput}
-            />
-            
-            {/* Отдельные input для фото и видео на мобильных */}
-            <input
-              id="cameraPhotoInput"
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleCameraCapture}
-              className={styles.fileInput}
-            />
-            
-            <input
-              id="cameraVideoInput"
-              type="file"
-              accept="video/*"
               capture="environment"
               onChange={handleCameraCapture}
               className={styles.fileInput}
