@@ -224,111 +224,113 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
           </div>
         )}
 
-        <div className={styles.postActions}>
-          <div className={styles.leftActions}>
-            <button 
-              className={`${styles.actionButton} ${isLiked ? styles.liked : ''}`}
-              onClick={handleLike}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill={isLiked ? "#ed4956" : "none"} stroke="currentColor">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </button>
-          </div>
-          <div className={styles.rightActions}>
-            <button className={styles.actionButton} onClick={() => setShowShareModal(true)}>
-              <img src={shareIcon} alt="Share" />
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.likesCount}>
-          <span>{likesCount} likes</span>
-        </div>
-
-        {post.caption && (
-          <div className={styles.caption}>
-            <span className={styles.username} onClick={handleUserClick}>{post.author?.username}</span>
-            <span className={styles.captionText}>{post.caption}</span>
-          </div>
-        )}
-
-        {post.comments && post.comments.length > 0 && (
-          <div className={styles.commentsPreview}>
-            {post.comments.length > 2 && (
+        <div className={styles.postContent}>
+          <div className={styles.postActions}>
+            <div className={styles.leftActions}>
               <button 
-                className={styles.viewAllComments}
-                onClick={() => setShowComments(!showComments)}
+                className={`${styles.actionButton} ${isLiked ? styles.liked : ''}`}
+                onClick={handleLike}
               >
-                View all {commentsCount} comments
+                <svg width="24" height="24" viewBox="0 0 24 24" fill={isLiked ? "#ed4956" : "none"} stroke="currentColor">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            </div>
+            <div className={styles.rightActions}>
+              <button className={styles.actionButton} onClick={() => setShowShareModal(true)}>
+                <img src={shareIcon} alt="Share" />
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.likesCount}>
+            <span>{likesCount} likes</span>
+          </div>
+
+          {post.caption && (
+            <div className={styles.caption}>
+              <span className={styles.username} onClick={handleUserClick}>{post.author?.username}</span>
+              <span className={styles.captionText}>{post.caption}</span>
+            </div>
+          )}
+
+          {post.comments && post.comments.length > 0 && (
+            <div className={styles.commentsPreview}>
+              {post.comments.length > 2 && (
+                <button 
+                  className={styles.viewAllComments}
+                  onClick={() => setShowComments(!showComments)}
+                >
+                  View all {commentsCount} comments
+                </button>
+              )}
+              {post.comments.slice(-2).map((comment, index) => (
+                <div key={comment._id || index} className={styles.comment}>
+                  <div className={styles.commentContent}>
+                    <span className={styles.username} onClick={handleUserClick}>{comment.author?.username}</span>
+                    <span className={styles.commentText}>{comment.text}</span>
+                  </div>
+                  {comment.author?._id === currentUserId && (
+                    <button 
+                      className={styles.deleteCommentButton}
+                      onClick={() => handleDeleteComment(comment._id)}
+                      title="Delete comment"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {showComments && post.comments && post.comments.length > 2 && (
+            <div className={styles.expandedComments}>
+              {post.comments.slice(0, -2).map((comment, index) => (
+                <div key={comment._id || index} className={styles.comment}>
+                  <div className={styles.commentContent}>
+                    <span className={styles.username} onClick={handleUserClick}>{comment.author?.username}</span>
+                    <span className={styles.commentText}>{comment.text}</span>
+                  </div>
+                  {comment.author?._id === currentUserId && (
+                    <button 
+                      className={styles.deleteCommentButton}
+                      onClick={() => handleDeleteComment(comment._id)}
+                      title="Delete comment"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className={styles.timestamp}>
+            {formatDate(post.createdAt)}
+          </div>
+
+          <form className={styles.addComment} onSubmit={handleComment}>
+            <input
+              type="text"
+              placeholder="Add a comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className={styles.commentInput}
+            />
+            {commentText.trim() && (
+              <button type="submit" className={styles.postButton}>
+                Post
               </button>
             )}
-            {post.comments.slice(-2).map((comment, index) => (
-              <div key={comment._id || index} className={styles.comment}>
-                <div className={styles.commentContent}>
-                  <span className={styles.username} onClick={handleUserClick}>{comment.author?.username}</span>
-                  <span className={styles.commentText}>{comment.text}</span>
-                </div>
-                {comment.author?._id === currentUserId && (
-                  <button 
-                    className={styles.deleteCommentButton}
-                    onClick={() => handleDeleteComment(comment._id)}
-                    title="Delete comment"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {showComments && post.comments && post.comments.length > 2 && (
-          <div className={styles.expandedComments}>
-            {post.comments.slice(0, -2).map((comment, index) => (
-              <div key={comment._id || index} className={styles.comment}>
-                <div className={styles.commentContent}>
-                  <span className={styles.username} onClick={handleUserClick}>{comment.author?.username}</span>
-                  <span className={styles.commentText}>{comment.text}</span>
-                </div>
-                {comment.author?._id === currentUserId && (
-                  <button 
-                    className={styles.deleteCommentButton}
-                    onClick={() => handleDeleteComment(comment._id)}
-                    title="Delete comment"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className={styles.timestamp}>
-          {formatDate(post.createdAt)}
+          </form>
         </div>
-
-        <form className={styles.addComment} onSubmit={handleComment}>
-          <input
-            type="text"
-            placeholder="Add a comment..."
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            className={styles.commentInput}
-          />
-          {commentText.trim() && (
-            <button type="submit" className={styles.postButton}>
-              Post
-            </button>
-          )}
-        </form>
       </div>
 
       <PostOptionsModal
