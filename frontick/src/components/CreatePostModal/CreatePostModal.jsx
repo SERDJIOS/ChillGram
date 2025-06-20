@@ -79,20 +79,10 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
     }
   }
 
-  const handleTakePhoto = () => {
+  const handleTakePhotoVideo = () => {
     if (isMobileDevice()) {
-      // На мобильных устройствах открываем нативную камеру для фото
-      document.getElementById('photoInput').click()
-    } else {
-      // На десктопе используем веб-камеру
-      openCamera()
-    }
-  }
-
-  const handleTakeVideo = () => {
-    if (isMobileDevice()) {
-      // На мобильных устройствах открываем нативную камеру для видео
-      document.getElementById('videoInput').click()
+      // На мобильных устройствах открываем нативную камеру для фото и видео
+      document.getElementById('cameraInput').click()
     } else {
       // На десктопе используем веб-камеру
       openCamera()
@@ -106,7 +96,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
       
       if (isMobile) {
         // На мобильных устройствах сразу открываем нативную камеру
-        document.getElementById('photoInput').click()
+        document.getElementById('cameraInput').click()
       } else {
         // На десктопе используем getUserMedia для веб-камеры
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -128,14 +118,14 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
           }, 100)
         } else {
           // Fallback - используем input с capture
-          document.getElementById('photoInput').click()
+          document.getElementById('cameraInput').click()
         }
       }
     } catch (error) {
       console.error('Error accessing camera:', error)
       setError('Не удалось получить доступ к камере. Попробуйте выбрать файл.')
       // Fallback - открываем обычный выбор файла
-      document.getElementById('photoInput').click()
+      document.getElementById('cameraInput').click()
     }
   }
 
@@ -375,18 +365,10 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                   <button 
                     type="button"
                     className={styles.cameraButton}
-                    onClick={handleTakePhoto}
+                    onClick={handleTakePhotoVideo}
                     disabled={isLoading}
                   >
-                    Take Photo
-                  </button>
-                  <button 
-                    type="button"
-                    className={styles.cameraButton}
-                    onClick={handleTakeVideo}
-                    disabled={isLoading}
-                  >
-                    Video
+                    Take Photo/Video
                   </button>
                 </div>
               </div>
@@ -402,18 +384,9 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
             />
             
             <input
-              id="photoInput"
+              id="cameraInput"
               type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleCameraCapture}
-              className={styles.fileInput}
-            />
-            
-            <input
-              id="videoInput"
-              type="file"
-              accept="video/*"
+              accept="image/*,video/*"
               capture="environment"
               onChange={handleCameraCapture}
               className={styles.fileInput}

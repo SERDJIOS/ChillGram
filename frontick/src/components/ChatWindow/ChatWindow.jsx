@@ -34,10 +34,12 @@ const ChatWindow = ({
   const [editText, setEditText] = useState('')
   const [isRecordingVoice, setIsRecordingVoice] = useState(false)
   const [isRecordingVideo, setIsRecordingVideo] = useState(false)
+  const [showVideoRecordingModal, setShowVideoRecordingModal] = useState(false)
   const [mediaRecorder, setMediaRecorder] = useState(null)
   const [recordingStream, setRecordingStream] = useState(null)
   const [recordingTime, setRecordingTime] = useState(0)
   const [recordingInterval, setRecordingInterval] = useState(null)
+  const [isRecordingCancelled, setIsRecordingCancelled] = useState(false)
 
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -543,16 +545,26 @@ const ChatWindow = ({
 
   const startVideoRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'user' }, 
-        audio: true 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: true
       })
-      setRecordingStream(stream)
       
-      if (recordingVideoRef.current) {
-        recordingVideoRef.current.srcObject = stream
-        recordingVideoRef.current.play()
-      }
+      setRecordingStream(stream)
+      setShowVideoRecordingModal(true)
+      setIsRecordingCancelled(false)
+      
+      // Ждем, пока модальное окно отобразится, затем устанавливаем видео
+      setTimeout(() => {
+        if (recordingVideoRef.current) {
+          recordingVideoRef.current.srcObject = stream
+          recordingVideoRef.current.play().catch(console.error)
+        }
+      }, 100)
       
       const recorder = new MediaRecorder(stream)
       const chunks = []
@@ -564,9 +576,11 @@ const ChatWindow = ({
       }
       
       recorder.onstop = async () => {
-        const videoBlob = new Blob(chunks, { type: 'video/webm' })
-        await sendVideoMessage(videoBlob)
-        cleanup()
+        if (!isRecordingCancelled) {
+          const videoBlob = new Blob(chunks, { type: 'video/webm' })
+          await sendVideoMessage(videoBlob)
+        }
+        closeVideoRecording()
       }
       
       setMediaRecorder(recorder)
@@ -582,7 +596,40 @@ const ChatWindow = ({
       recorder.start()
     } catch (error) {
       console.error('Error starting video recording:', error)
+      alert('Не удалось получить доступ к камере. Проверьте разрешения.')
     }
+  }
+
+  const stopVideoRecording = () => {
+    setIsRecordingCancelled(false)
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop()
+    }
+  }
+
+  const cancelVideoRecording = () => {
+    setIsRecordingCancelled(true)
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop()
+    } else {
+      closeVideoRecording()
+    }
+  }
+
+  const closeVideoRecording = () => {
+    if (recordingStream) {
+      recordingStream.getTracks().forEach(track => track.stop())
+      setRecordingStream(null)
+    }
+    if (recordingInterval) {
+      clearInterval(recordingInterval)
+      setRecordingInterval(null)
+    }
+    setMediaRecorder(null)
+    setIsRecordingVideo(false)
+    setShowVideoRecordingModal(false)
+    setRecordingTime(0)
+    setIsRecordingCancelled(false)
   }
 
   const stopRecording = () => {
@@ -609,7 +656,6 @@ const ChatWindow = ({
     }
     setMediaRecorder(null)
     setIsRecordingVoice(false)
-    setIsRecordingVideo(false)
     setRecordingTime(0)
   }
 
@@ -1076,37 +1122,31 @@ const ChatWindow = ({
           </div>
         )}
 
-        {/* Видео записи для видеосообщений */}
-        {isRecordingVideo && (
-          <div className={styles.videoRecordingContainer}>
-            <video 
-              ref={recordingVideoRef}
-              className={styles.recordingVideo}
-              autoPlay
-              muted
-              playsInline
-            />
-            <div className={styles.videoRecordingOverlay}>
-              <div className={styles.recordingInfo}>
-                <div className={styles.recordingDot}></div>
-                <span>Recording video... {formatRecordingTime(recordingTime)}</span>
+        {/* Модальное окно видео записи */}
+        {showVideoRecordingModal && (
+          <div className={styles.videoRecordingModal} onClick={cancelVideoRecording}>
+            <div className={styles.videoRecordingModalContent} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.videoRecordingHeader}>
+                <div className={styles.recordingInfo}>
+                  <div className={styles.recordingDot}></div>
+                  <span>Recording... {formatRecordingTime(recordingTime)}</span>
+                </div>
               </div>
-              <div className={styles.videoRecordingButtons}>
+              
+              <div className={styles.circularVideoContainer}>
+                <video 
+                  ref={recordingVideoRef}
+                  className={styles.circularVideo}
+                  autoPlay
+                  muted
+                  playsInline
+                />
+              </div>
+              
+              <div className={styles.videoRecordingControls}>
                 <button 
-                  className={styles.sendRecordingButton}
-                  onClick={stopRecording}
-                  title="Send video message"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path 
-                      d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
-                      fill="currentColor"
-                    />
-                  </svg>
-                </button>
-                <button 
-                  className={styles.cancelRecordingButton}
-                  onClick={cancelRecording}
+                  className={styles.cancelVideoButton}
+                  onClick={cancelVideoRecording}
                   title="Cancel recording"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -1116,6 +1156,19 @@ const ChatWindow = ({
                       strokeWidth="2" 
                       strokeLinecap="round" 
                       strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                
+                <button 
+                  className={styles.sendVideoButton}
+                  onClick={stopVideoRecording}
+                  title="Send video message"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path 
+                      d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
+                      fill="currentColor"
                     />
                   </svg>
                 </button>
