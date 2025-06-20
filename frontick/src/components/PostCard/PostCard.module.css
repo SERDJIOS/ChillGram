@@ -154,15 +154,18 @@
 /* Actions */
 .postActions {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 6px 16px 8px 16px;
+  align-items: center;
+  padding: 12px 16px 8px;
 }
 
 .leftActions {
   display: flex;
-  align-items: center;
   gap: 16px;
+}
+
+.rightActions {
+  display: flex;
 }
 
 .actionButton {
@@ -189,6 +192,12 @@
 
 .actionButton.liked:hover {
   transform: scale(1.2);
+}
+
+.actionButton img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%);
 }
 
 /* Likes count */

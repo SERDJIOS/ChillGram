@@ -290,6 +290,11 @@
   gap: 16px;
 }
 
+.rightActions {
+  display: flex;
+  align-items: center;
+}
+
 .actionButton {
   background: none;
   border: none;
@@ -312,6 +317,12 @@
 .actionButton.liked svg path {
   fill: #ed4956;
   stroke: #ed4956;
+}
+
+.actionButton img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%);
 }
 
 /* Likes */

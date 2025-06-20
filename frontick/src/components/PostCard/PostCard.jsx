@@ -6,6 +6,7 @@ import EditPostModal from '../EditPostModal/EditPostModal';
 import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
+import shareIcon from '../../assets/share_icon.svg';
 import { API_CONFIG } from '../../config/api.js';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -213,12 +214,10 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
             </button>
+          </div>
+          <div className={styles.rightActions}>
             <button className={styles.actionButton} onClick={() => setShowShareModal(true)}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                <polyline points="16,6 12,2 8,6"/>
-                <line x1="12" y1="2" x2="12" y2="15"/>
-              </svg>
+              <img src={shareIcon} alt="Share" />
             </button>
           </div>
         </div>

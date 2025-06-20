@@ -7,6 +7,7 @@ import EditPostModal from '../EditPostModal/EditPostModal';
 import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
+import shareIcon from '../../assets/share_icon.svg';
 import { API_CONFIG } from '../../config/api.js';
 
 const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostChange, currentUserId, onPostUpdated, onPostDeleted }) => {
@@ -469,15 +470,10 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
                   />
                 </svg>
               </button>
-              
+            </div>
+            <div className={styles.rightActions}>
               <button className={styles.actionButton} onClick={() => setShowShareModal(true)}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path 
-                    d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" 
-                    stroke="#262626" 
-                    strokeWidth="2"
-                  />
-                </svg>
+                <img src={shareIcon} alt="Share" />
               </button>
             </div>
           </div>
