@@ -161,6 +161,19 @@
   display: block;
 }
 
+/* Video styles */
+.postImage[src$=".mp4"],
+.postImage[src*="video/upload/"],
+.postImage[src*="resource_type/video"],
+video.postImage {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+  background-color: #000000;
+}
+
 /* Navigation Buttons */
 .navButton {
   position: absolute;

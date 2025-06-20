@@ -38,7 +38,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
       setError('') // Очищаем ошибку при выборе нового файла
       setCurrentImageIndex(0) // Сбрасываем на первое изображение
       
-      // Создаем превью для всех изображений
+      // Создаем превью для всех файлов (изображения и видео)
       const previews = []
       let loadedCount = 0
       
@@ -152,7 +152,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
     e.preventDefault()
     
     if (selectedImages.length === 0) {
-      setError('Please select at least one image')
+      setError('Please select at least one image or video')
       return
     }
 
@@ -160,9 +160,9 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
     setError('')
     
     try {
-      // Отправляем все изображения
+      // Отправляем все файлы (изображения и видео)
       await onCreatePost({
-        images: selectedImages, // Отправляем массив всех изображений
+        images: selectedImages, // Отправляем массив всех файлов
         caption: caption.trim()
       })
       
@@ -238,20 +238,30 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
           <div className={styles.imageSection}>
             {imagePreviews.length > 0 ? (
               <div className={styles.imagePreview}>
-                <img 
-                  src={imagePreviews[currentImageIndex]} 
-                  alt="Preview" 
-                  className={styles.previewImage}
-                />
+                {selectedImages[currentImageIndex]?.type?.startsWith('video/') ? (
+                  <video 
+                    src={imagePreviews[currentImageIndex]} 
+                    className={styles.previewImage}
+                    controls
+                    muted
+                    autoPlay={false}
+                  />
+                ) : (
+                  <img 
+                    src={imagePreviews[currentImageIndex]} 
+                    alt="Preview" 
+                    className={styles.previewImage}
+                  />
+                )}
                 
-                {/* Стрелочки навигации */}
+                {/* Navigation buttons for multiple files */}
                 {imagePreviews.length > 1 && (
                   <>
                     <button 
                       type="button"
                       className={`${styles.navButton} ${styles.prevButton}`}
                       onClick={prevImage}
-                      disabled={currentImageIndex === 0}
+                      disabled={currentImageIndex === 0 || isLoading}
                     >
                       <img src={arrowBackIcon} alt="Previous" />
                     </button>
@@ -259,14 +269,14 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                       type="button"
                       className={`${styles.navButton} ${styles.nextButton}`}
                       onClick={nextImage}
-                      disabled={currentImageIndex === imagePreviews.length - 1}
+                      disabled={currentImageIndex === imagePreviews.length - 1 || isLoading}
                     >
                       <img src={arrowForwardIcon} alt="Next" />
                     </button>
                   </>
                 )}
                 
-                {/* Индикаторы */}
+                {/* Indicators */}
                 {imagePreviews.length > 1 && (
                   <div className={styles.indicators}>
                     {imagePreviews.map((_, index) => (
@@ -289,7 +299,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                   }}
                   disabled={isLoading}
                 >
-                  Change images
+                  Change files
                 </button>
               </div>
             ) : showCamera ? (
@@ -341,7 +351,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                     onClick={openCamera}
                     disabled={isLoading}
                   >
-                    Take a picture
+                    Take photo/video
                   </button>
                 </div>
               </div>
@@ -350,7 +360,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
             <input
               id="imageInput"
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               multiple
               onChange={handleImageSelect}
               className={styles.fileInput}
@@ -359,7 +369,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
             <input
               id="cameraInput"
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               capture="environment"
               onChange={handleCameraCapture}
               className={styles.fileInput}

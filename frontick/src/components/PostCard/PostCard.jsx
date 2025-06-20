@@ -49,6 +49,15 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
   const isOwnPost = currentUserId && post.author?._id === currentUserId;
   const images = post.images || (post.image ? [post.image] : []);
   
+  // Функция для определения типа файла по URL
+  const isVideoFile = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext)) || 
+           url.includes('video/upload/') || // Cloudinary video URLs
+           url.includes('resource_type/video');
+  };
+  
   const nextImage = () => {
     if (currentImageIndex < images.length - 1) {
       setCurrentImageIndex(currentImageIndex + 1);
@@ -165,11 +174,22 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
 
         {images.length > 0 && (
           <div className={styles.imageContainer}>
-            <img 
-              src={images[currentImageIndex]} 
-              alt="Post content"
-              className={styles.postImage}
-            />
+            {isVideoFile(images[currentImageIndex]) ? (
+              <video 
+                src={images[currentImageIndex]} 
+                className={styles.postImage}
+                controls
+                muted
+                autoPlay={false}
+                preload="metadata"
+              />
+            ) : (
+              <img 
+                src={images[currentImageIndex]} 
+                alt="Post content"
+                className={styles.postImage}
+              />
+            )}
             
             {images.length > 1 && (
               <>

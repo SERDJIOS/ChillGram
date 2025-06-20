@@ -11,37 +11,59 @@ const createPost = async (req, res) => {
     const { caption } = req.body;
     const userId = req.user.id;
 
-    // Проверяем, есть ли изображения
+    // Проверяем, есть ли файлы
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: 'At least one image is required' });
+      return res.status(400).json({ message: 'At least one image or video is required' });
     }
 
-    // Загружаем изображения в Cloudinary
-    const imageUploadPromises = req.files.map(file => {
+    // Загружаем файлы в Cloudinary
+    const fileUploadPromises = req.files.map(file => {
       return new Promise((resolve, reject) => {
+        const isVideo = file.mimetype.startsWith('video/');
+        
+        const uploadOptions = {
+          folder: 'posts',
+          resource_type: isVideo ? 'video' : 'image'
+        };
+
+        // Настройки для изображений
+        if (!isVideo) {
+          uploadOptions.transformation = [
+            { width: 1080, height: 1080, crop: 'limit' },
+            { quality: 'auto' }
+          ];
+        } else {
+          // Настройки для видео
+          uploadOptions.transformation = [
+            { width: 1080, height: 1080, crop: 'limit' },
+            { quality: 'auto' },
+            { format: 'mp4' }
+          ];
+        }
+
         cloudinary.uploader.upload_stream(
-          {
-            folder: 'posts',
-            transformation: [
-              { width: 1080, height: 1080, crop: 'limit' },
-              { quality: 'auto' }
-            ]
-          },
+          uploadOptions,
           (error, result) => {
             if (error) reject(error);
-            else resolve(result.secure_url);
+            else resolve({
+              url: result.secure_url,
+              type: isVideo ? 'video' : 'image'
+            });
           }
         ).end(file.buffer);
       });
     });
 
-    const imageUrls = await Promise.all(imageUploadPromises);
+    const fileResults = await Promise.all(fileUploadPromises);
+    const fileUrls = fileResults.map(result => result.url);
+    const fileTypes = fileResults.map(result => result.type);
 
     // Создаем новый пост
     const newPost = new Post({
       author: userId,
-      images: imageUrls, // Массив URL изображений
-      image: imageUrls[0], // Первое изображение для совместимости со старым кодом
+      images: fileUrls, // Массив URL файлов (изображения и видео)
+      fileTypes: fileTypes, // Массив типов файлов
+      image: fileUrls[0], // Первый файл для совместимости со старым кодом
       caption: caption || ''
     });
 

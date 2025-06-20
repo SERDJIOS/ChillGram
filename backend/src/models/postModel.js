@@ -11,7 +11,11 @@ const postSchema = new mongoose.Schema({
     required: false // Теперь не обязательно, так как будет images
   },
   images: {
-    type: [String], // Массив строк для множественных изображений
+    type: [String], // Массив строк для множественных изображений и видео
+    default: []
+  },
+  fileTypes: {
+    type: [String], // Массив типов файлов ('image' или 'video')
     default: []
   },
   caption: {
