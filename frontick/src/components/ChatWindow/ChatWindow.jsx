@@ -18,7 +18,6 @@ const ChatWindow = ({
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
-  const [isTyping, setIsTyping] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
@@ -40,11 +39,7 @@ const ChatWindow = ({
   const [recordingStream, setRecordingStream] = useState(null)
   const [recordingTime, setRecordingTime] = useState(0)
   const [recordingInterval, setRecordingInterval] = useState(null)
-  const [showCameraButton, setShowCameraButton] = useState(false)
-  const [recordedVoiceBlob, setRecordedVoiceBlob] = useState(null)
-  const [recordedVideoBlob, setRecordedVideoBlob] = useState(null)
-  const [isVoiceRecorded, setIsVoiceRecorded] = useState(false)
-  const [isVideoRecorded, setIsVideoRecorded] = useState(false)
+
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -55,6 +50,13 @@ const ChatWindow = ({
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
   const defaultAvatar = DefaultProfilePic
   const navigate = useNavigate()
+
+  // Функция для проверки мобильного устройства
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           ('ontouchstart' in window) ||
+           (navigator.maxTouchPoints > 0);
+  };
 
   // Загружаем сообщения при выборе чата
   useEffect(() => {
@@ -181,6 +183,7 @@ const ChatWindow = ({
         setMessages(data.messages || [])
       }
     } catch (error) {
+      console.error('Error fetching messages:', error)
     } finally {
       setLoading(false)
     }
@@ -211,6 +214,7 @@ const ChatWindow = ({
       // Не добавляем сообщение локально - оно придет через Socket.io
     } catch (error) {
       // Возвращаем текст в поле ввода при ошибке
+      console.error('Error sending message:', error)
       setNewMessage(messageText)
     } finally {
       setSending(false)
@@ -222,34 +226,27 @@ const ChatWindow = ({
   const handleImageSend = async (text) => {
     if (!selectedImage || !imagePreview) return null
 
-
-
-    try {
-      // Отправляем сообщение с base64 изображением напрямую
-      const token = localStorage.getItem('token')
-      const messageResponse = await fetch(`${API_CONFIG.API_URL}/messages/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          receiverId: chat.otherUser._id,
-          text: text || '',
-          image: imagePreview // Используем base64 из превью
-        })
+    // Отправляем сообщение с base64 изображением напрямую
+    const token = localStorage.getItem('token')
+    const messageResponse = await fetch(`${API_CONFIG.API_URL}/messages/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        receiverId: chat.otherUser._id,
+        text: text || '',
+        image: imagePreview // Используем base64 из превью
       })
+    })
 
-      if (!messageResponse.ok) {
-        const errorText = await messageResponse.text()
-        throw new Error('Failed to send message')
-      }
-
-      const messageData = await messageResponse.json()
-      return messageData.data
-    } catch (error) {
-      throw error
+    if (!messageResponse.ok) {
+      throw new Error('Failed to send message')
     }
+
+    const messageData = await messageResponse.json()
+    return messageData.data
   }
 
   const handleInputChange = (e) => {
@@ -284,8 +281,35 @@ const ChatWindow = ({
     setShowImageOptions(false)
   }
 
-  const openCamera = async () => {
+  const handleTakePhoto = () => {
     setShowImageOptions(false)
+    if (isMobileDevice()) {
+      // На мобильных устройствах открываем нативную камеру для фото
+      const photoInput = document.getElementById('photoInput')
+      if (photoInput) {
+        photoInput.click()
+      }
+    } else {
+      // На десктопе используем веб-камеру
+      openCamera()
+    }
+  }
+
+  const handleTakeVideo = () => {
+    setShowImageOptions(false)
+    if (isMobileDevice()) {
+      // На мобильных устройствах открываем нативную камеру для видео
+      const videoInput = document.getElementById('videoInput')
+      if (videoInput) {
+        videoInput.click()
+      }
+    } else {
+      // На десктопе используем веб-камеру (можно расширить для видео)
+      openCamera()
+    }
+  }
+
+  const openCamera = async () => {
     try {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -306,7 +330,7 @@ const ChatWindow = ({
         }, 100)
       } else {
         // Fallback для старых браузеров - используем input с capture
-        const cameraInput = document.getElementById('cameraInput')
+        const cameraInput = document.getElementById('photoInput')
         if (cameraInput) {
           cameraInput.click()
         }
@@ -314,44 +338,10 @@ const ChatWindow = ({
     } catch (error) {
       console.error('Error accessing camera:', error)
       // Fallback - открываем обычный выбор файла
-      const cameraInput = document.getElementById('cameraInput')
+      const cameraInput = document.getElementById('photoInput')
       if (cameraInput) {
         cameraInput.click()
       }
-    }
-  }
-
-  const capturePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current
-      const canvas = canvasRef.current
-      const context = canvas.getContext('2d')
-      
-      // Устанавливаем размеры canvas равными размерам видео
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      
-      // Рисуем текущий кадр видео на canvas
-      context.drawImage(video, 0, 0, canvas.width, canvas.height)
-      
-      // Конвертируем canvas в blob
-      canvas.toBlob((blob) => {
-        if (blob) {
-          // Создаем File объект из blob
-          const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' })
-          setSelectedImage(file)
-          
-          // Создаем превью
-          const reader = new FileReader()
-          reader.onload = (e) => {
-            setImagePreview(e.target.result)
-          }
-          reader.readAsDataURL(file)
-          
-          // Закрываем камеру
-          closeCamera()
-        }
-      }, 'image/jpeg', 0.8)
     }
   }
 
@@ -517,7 +507,6 @@ const ChatWindow = ({
       })
 
       if (response.ok) {
-        const updatedMessage = await response.json()
         // Обновляем сообщение в локальном списке
         setMessages(prev => prev.map(msg => 
           msg._id === editingMessage ? { ...msg, text: editText.trim(), edited: true } : msg
@@ -784,134 +773,7 @@ const ChatWindow = ({
     '👿', '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾'
   ]
 
-  // Определение мобильного устройства
-  const isMobileDevice = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform))
-  }
-
-  // Показать кнопку камеры
-  const handleMicrophoneClick = () => {
-    setShowCameraButton(true)
-  }
-
-  // Скрыть кнопку камеры
-  const hideCameraButton = () => {
-    setShowCameraButton(false)
-  }
-
-  // Обновленная функция записи голосового сообщения
-  const startVoiceRecordingMobile = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      setRecordingStream(stream)
-      
-      const recorder = new MediaRecorder(stream)
-      const chunks = []
-      
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunks.push(e.data)
-        }
-      }
-      
-      recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' })
-        setRecordedVoiceBlob(audioBlob)
-        setIsVoiceRecorded(true)
-        cleanup()
-      }
-      
-      setMediaRecorder(recorder)
-      setIsRecordingVoice(true)
-      setRecordingTime(0)
-      
-      // Запускаем таймер
-      const interval = setInterval(() => {
-        setRecordingTime(prev => prev + 1)
-      }, 1000)
-      setRecordingInterval(interval)
-      
-      recorder.start()
-    } catch (error) {
-      console.error('Error starting voice recording:', error)
-    }
-  }
-
-  // Обновленная функция записи видеосообщения
-  const startVideoRecordingMobile = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'user' }, 
-        audio: true 
-      })
-      setRecordingStream(stream)
-      
-      if (recordingVideoRef.current) {
-        recordingVideoRef.current.srcObject = stream
-        recordingVideoRef.current.play()
-      }
-      
-      const recorder = new MediaRecorder(stream)
-      const chunks = []
-      
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunks.push(e.data)
-        }
-      }
-      
-      recorder.onstop = async () => {
-        const videoBlob = new Blob(chunks, { type: 'video/webm' })
-        setRecordedVideoBlob(videoBlob)
-        setIsVideoRecorded(true)
-        cleanup()
-      }
-      
-      setMediaRecorder(recorder)
-      setIsRecordingVideo(true)
-      setRecordingTime(0)
-      
-      // Запускаем таймер
-      const interval = setInterval(() => {
-        setRecordingTime(prev => prev + 1)
-      }, 1000)
-      setRecordingInterval(interval)
-      
-      recorder.start()
-    } catch (error) {
-      console.error('Error starting video recording:', error)
-    }
-  }
-
-  // Отправить записанное голосовое сообщение
-  const sendRecordedVoice = async () => {
-    if (recordedVoiceBlob) {
-      await sendVoiceMessage(recordedVoiceBlob)
-      setRecordedVoiceBlob(null)
-      setIsVoiceRecorded(false)
-      setShowCameraButton(false)
-    }
-  }
-
-  // Отправить записанное видеосообщение
-  const sendRecordedVideo = async () => {
-    if (recordedVideoBlob) {
-      await sendVideoMessage(recordedVideoBlob)
-      setRecordedVideoBlob(null)
-      setIsVideoRecorded(false)
-      setShowCameraButton(false)
-    }
-  }
-
-  // Удалить записанное сообщение
-  const deleteRecordedMessage = () => {
-    setRecordedVoiceBlob(null)
-    setRecordedVideoBlob(null)
-    setIsVoiceRecorded(false)
-    setIsVideoRecorded(false)
-    setShowCameraButton(false)
-  }
+  
 
   if (!chat) return null
 
@@ -1209,15 +1071,7 @@ const ChatWindow = ({
               </div>
             ))}
             
-            {isTyping && (
-              <div className={styles.typingIndicator}>
-                <div className={styles.typingDots}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-            )}
+
             
             <div ref={messagesEndRef} />
           </div>
@@ -1259,16 +1113,31 @@ const ChatWindow = ({
               </div>
               <div className={styles.videoRecordingButtons}>
                 <button 
-                  className={styles.stopRecordingButton}
+                  className={styles.sendRecordingButton}
                   onClick={stopRecording}
+                  title="Send video message"
                 >
-                  Stop
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path 
+                      d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
+                      fill="currentColor"
+                    />
+                  </svg>
                 </button>
                 <button 
                   className={styles.cancelRecordingButton}
                   onClick={cancelRecording}
+                  title="Cancel recording"
                 >
-                  Cancel
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path 
+                      d="M18 6L6 18M6 6l12 12" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -1532,11 +1401,21 @@ const ChatWindow = ({
           style={{ display: 'none' }}
         />
         
-        {/* Скрытый input для камеры */}
+        {/* Скрытый input для фото с камеры */}
         <input
-          id="cameraInput"
+          id="photoInput"
           type="file"
           accept="image/*"
+          capture="environment"
+          onChange={handleCameraCapture}
+          style={{ display: 'none' }}
+        />
+        
+        {/* Скрытый input для видео с камеры */}
+        <input
+          id="videoInput"
+          type="file"
+          accept="video/*"
           capture="environment"
           onChange={handleCameraCapture}
           style={{ display: 'none' }}
@@ -1574,7 +1453,7 @@ const ChatWindow = ({
         <div className={styles.imageOptionsModal} onClick={() => setShowImageOptions(false)}>
           <div className={styles.imageOptionsContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.imageOptionsHeader}>
-              <h3>Select Image</h3>
+              <h3>Select Media</h3>
               <button 
                 className={styles.imageOptionsClose}
                 onClick={() => setShowImageOptions(false)}
@@ -1584,19 +1463,25 @@ const ChatWindow = ({
             </div>
             <div className={styles.imageOptionsButtons}>
               <div className={styles.uploadIcon}>📷</div>
-              <p className={styles.uploadText}>Select photos to share</p>
+              <p className={styles.uploadText}>Choose how to add media</p>
               <div className={styles.buttonGroup}>
                 <button 
                   className={styles.imageOptionButton}
                   onClick={handleFileUpload}
                 >
-                  Select from computer
+                  Select from Gallery
                 </button>
                 <button 
                   className={styles.imageOptionButton}
-                  onClick={openCamera}
+                  onClick={handleTakePhoto}
                 >
-                  Take a picture
+                  Take Photo
+                </button>
+                <button 
+                  className={styles.imageOptionButton}
+                  onClick={handleTakeVideo}
+                >
+                  Video
                 </button>
               </div>
             </div>
@@ -1604,8 +1489,8 @@ const ChatWindow = ({
         </div>
       )}
 
-      {/* Модальное окно камеры */}
-      {showCamera && (
+      {/* Модальное окно камеры - только для десктопа */}
+      {showCamera && !isMobileDevice() && (
         <div className={styles.cameraModal} onClick={closeCamera}>
           <div className={styles.cameraContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.cameraHeader}>
@@ -1630,24 +1515,7 @@ const ChatWindow = ({
                 style={{ display: 'none' }}
               />
             </div>
-            <div className={styles.cameraControls}>
-              <button 
-                className={styles.captureButton}
-                onClick={capturePhoto}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2"/>
-                </svg>
-                Capture
-              </button>
-              <button 
-                className={styles.cancelCameraButton}
-                onClick={closeCamera}
-              >
-                Cancel
-              </button>
-            </div>
+            
           </div>
         </div>
       )}
