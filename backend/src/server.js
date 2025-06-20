@@ -26,27 +26,18 @@ const server = http.createServer(app);
 // Настройка Socket.io
 const io = new Server(server, {
   cors: {
-    origin: function(origin, callback) {
-      const allowedOrigins = [
-        'http://localhost:5000',
-        'http://localhost:5001', 
-        'http://localhost:5002',
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://localhost:5175',
-        'https://chillgram.vercel.app',
-        'https://chillgram-git-main-serdjios-projects.vercel.app',
-        'https://chillgram-serdjios-projects.vercel.app',
-        'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app'
-      ];
-      
-      // Разрешить все домены vercel.app
-      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: [
+      'http://localhost:5000',
+      'http://localhost:5001', 
+      'http://localhost:5002',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'https://chillgram.vercel.app',
+      'https://chillgram-git-main-serdjios-projects.vercel.app',
+      'https://chillgram-serdjios-projects.vercel.app',
+      'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app'
+    ],
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -63,27 +54,18 @@ app.use((req, res, next) => {
 
 // Middleware
 app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:5000',
-      'http://localhost:5001', 
-      'http://localhost:5002',
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175',
-      'https://chillgram.vercel.app',
-      'https://chillgram-git-main-serdjios-projects.vercel.app',
-      'https://chillgram-serdjios-projects.vercel.app',
-      'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app'
-    ];
-    
-    // Разрешить все домены vercel.app
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: [
+    'http://localhost:5000',
+    'http://localhost:5001', 
+    'http://localhost:5002',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'https://chillgram.vercel.app',
+    'https://chillgram-git-main-serdjios-projects.vercel.app',
+    'https://chillgram-serdjios-projects.vercel.app',
+    'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app'
+  ],
   credentials: true
 }));
 
