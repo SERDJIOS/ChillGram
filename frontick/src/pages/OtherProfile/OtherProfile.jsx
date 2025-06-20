@@ -388,11 +388,11 @@ const OtherProfile = () => {
                     <div className={styles.postOverlay}>
                       <div className={styles.postStats}>
                         <div className={styles.postStat}>
-                          <img src="/src/assets/reactions/like.svg" alt="Likes" className={styles.statIcon} />
+                          <img src={IconHeart} alt="Likes" className={styles.statIcon} />
                           <span>{post.likesCount || 0}</span>
                         </div>
                         <div className={styles.postStat}>
-                          <img src="/src/assets/reactions/comment.svg" alt="Comments" className={styles.statIcon} />
+                          <img src={IconComment} alt="Comments" className={styles.statIcon} />
                           <span>{post.commentsCount || 0}</span>
                         </div>
                       </div>
