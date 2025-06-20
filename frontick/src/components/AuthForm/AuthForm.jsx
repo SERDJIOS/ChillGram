@@ -17,6 +17,47 @@ import { API_CONFIG } from '../../config/api.js'
 import styles from './AuthForm.module.css'
 
 const AuthForm = ({ type = 'login' }) => {
+  // Общие стили для всех TextField
+  const textFieldStyles = {
+    '& .MuiOutlinedInput-root': {
+      backgroundColor: '#FFFFFF',
+      borderRadius: '3px',
+      fontSize: '14px',
+      '& fieldset': {
+        borderColor: '#DBDBDB',
+      },
+      '&:hover fieldset': {
+        borderColor: '#A8A8A8',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1976d2',
+        borderWidth: '1px'
+      },
+      '&.Mui-error fieldset': {
+        borderColor: '#ed4956',
+      },
+      '&.Mui-error:hover fieldset': {
+        borderColor: '#ed4956',
+      },
+      '&.Mui-error.Mui-focused fieldset': {
+        borderColor: '#ed4956',
+      }
+    },
+    '& .MuiInputBase-input': {
+      padding: '14px 12px',
+      fontSize: '14px',
+      fontWeight: 400
+    },
+    '& .MuiFormHelperText-root': {
+      color: '#ed4956',
+      fontSize: '12px',
+      marginTop: '4px',
+      marginLeft: '0px',
+      fontWeight: 400,
+      lineHeight: '16px'
+    }
+  };
+
   const [formData, setFormData] = useState(() => {
     // Автозаполнение email после регистрации
     const signupEmail = localStorage.getItem('signupEmail')
@@ -55,20 +96,31 @@ const AuthForm = ({ type = 'login' }) => {
     const newErrors = {}
     
     if (type === 'signup') {
+      // Email валидация
       if (!formData.email.trim()) {
         newErrors.email = 'Email is required'
       } else if (!validateEmail(formData.email)) {
-        newErrors.email = 'Please enter a valid email'
+        newErrors.email = 'Please enter a valid email address'
       }
       
+      // Full name валидация
       if (!formData.fullName.trim()) {
         newErrors.fullName = 'Full name is required'
+      } else if (formData.fullName.trim().length < 2) {
+        newErrors.fullName = 'Full name must be at least 2 characters'
+      } else if (formData.fullName.trim().length > 50) {
+        newErrors.fullName = 'Full name must be less than 50 characters'
       }
       
+      // Username валидация
       if (!formData.username.trim()) {
         newErrors.username = 'Username is required'
       } else if (formData.username.length < 3) {
         newErrors.username = 'Username must be at least 3 characters'
+      } else if (formData.username.length > 30) {
+        newErrors.username = 'Username must be less than 30 characters'
+      } else if (!/^[a-zA-Z0-9._]+$/.test(formData.username)) {
+        newErrors.username = 'Username can only contain letters, numbers, dots and underscores'
       }
     } else {
       // Для логина можем использовать email или username
@@ -77,10 +129,13 @@ const AuthForm = ({ type = 'login' }) => {
       }
     }
     
+    // Password валидация
     if (!formData.password) {
       newErrors.password = 'Password is required'
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters'
+    } else if (formData.password.length > 128) {
+      newErrors.password = 'Password must be less than 128 characters'
     }
     
     setErrors(newErrors)
@@ -107,6 +162,65 @@ const AuthForm = ({ type = 'login' }) => {
     if (apiError) {
       setApiError('')
     }
+  }
+
+  // Валидация при потере фокуса
+  const handleBlur = (e) => {
+    const { name, value } = e.target
+    const newErrors = { ...errors }
+    
+    // Валидируем конкретное поле
+    if (name === 'email' && type === 'signup') {
+      if (!value.trim()) {
+        newErrors.email = 'Email is required'
+      } else if (!validateEmail(value)) {
+        newErrors.email = 'Please enter a valid email address'
+      } else {
+        delete newErrors.email
+      }
+    } else if (name === 'fullName' && type === 'signup') {
+      if (!value.trim()) {
+        newErrors.fullName = 'Full name is required'
+      } else if (value.trim().length < 2) {
+        newErrors.fullName = 'Full name must be at least 2 characters'
+      } else if (value.trim().length > 50) {
+        newErrors.fullName = 'Full name must be less than 50 characters'
+      } else {
+        delete newErrors.fullName
+      }
+    } else if (name === 'username') {
+      if (type === 'signup') {
+        if (!value.trim()) {
+          newErrors.username = 'Username is required'
+        } else if (value.length < 3) {
+          newErrors.username = 'Username must be at least 3 characters'
+        } else if (value.length > 30) {
+          newErrors.username = 'Username must be less than 30 characters'
+        } else if (!/^[a-zA-Z0-9._]+$/.test(value)) {
+          newErrors.username = 'Username can only contain letters, numbers, dots and underscores'
+        } else {
+          delete newErrors.username
+        }
+      } else {
+        if (!value.trim()) {
+          newErrors.username = 'Username or email is required'
+        } else {
+          delete newErrors.username
+        }
+      }
+    } else if (name === 'password') {
+      if (!value) {
+        newErrors.password = 'Password is required'
+      } else if (value.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters'
+      } else if (value.length > 128) {
+        newErrors.password = 'Password must be less than 128 characters'
+      } else {
+        delete newErrors.password
+      }
+    }
+    
+    setErrors(newErrors)
   }
 
   // Показать/скрыть пароль
@@ -203,31 +317,11 @@ const AuthForm = ({ type = 'login' }) => {
           placeholder="Email"
           value={formData.email}
           onChange={handleInputChange}
+          onBlur={handleBlur}
           error={!!errors.email}
           helperText={errors.email}
           className={styles.textField}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#FFFFFF',
-              borderRadius: '3px',
-              fontSize: '14px',
-              '& fieldset': {
-                borderColor: '#DBDBDB',
-              },
-              '&:hover fieldset': {
-                borderColor: '#A8A8A8',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#1976d2',
-                borderWidth: '1px'
-              }
-            },
-            '& .MuiInputBase-input': {
-              padding: '14px 12px',
-              fontSize: '14px',
-              fontWeight: 400
-            }
-          }}
+          sx={textFieldStyles}
         />
       )}
 
@@ -239,31 +333,11 @@ const AuthForm = ({ type = 'login' }) => {
           placeholder="Full Name"
           value={formData.fullName}
           onChange={handleInputChange}
+          onBlur={handleBlur}
           error={!!errors.fullName}
           helperText={errors.fullName}
           className={styles.textField}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#FFFFFF',
-              borderRadius: '3px',
-              fontSize: '14px',
-              '& fieldset': {
-                borderColor: '#DBDBDB',
-              },
-              '&:hover fieldset': {
-                borderColor: '#A8A8A8',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#1976d2',
-                borderWidth: '1px'
-              }
-            },
-            '& .MuiInputBase-input': {
-              padding: '14px 12px',
-              fontSize: '14px',
-              fontWeight: 400
-            }
-          }}
+          sx={textFieldStyles}
         />
       )}
 
@@ -274,31 +348,11 @@ const AuthForm = ({ type = 'login' }) => {
         placeholder={type === 'login' ? "Username, or email" : "Username"}
         value={formData.username}
         onChange={handleInputChange}
+        onBlur={handleBlur}
         error={!!errors.username}
         helperText={errors.username}
         className={styles.textField}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            backgroundColor: '#FFFFFF',
-            borderRadius: '3px',
-            fontSize: '14px',
-            '& fieldset': {
-              borderColor: '#DBDBDB',
-            },
-            '&:hover fieldset': {
-              borderColor: '#A8A8A8',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#1976d2',
-              borderWidth: '1px'
-            }
-          },
-          '& .MuiInputBase-input': {
-            padding: '14px 12px',
-            fontSize: '14px',
-            fontWeight: 400
-          }
-        }}
+        sx={textFieldStyles}
       />
 
       {/* Password */}
@@ -309,6 +363,7 @@ const AuthForm = ({ type = 'login' }) => {
         placeholder="Password"
         value={formData.password}
         onChange={handleInputChange}
+        onBlur={handleBlur}
         error={!!errors.password}
         helperText={errors.password}
         InputProps={{
@@ -325,28 +380,7 @@ const AuthForm = ({ type = 'login' }) => {
           ),
         }}
         className={styles.textField}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            backgroundColor: '#FFFFFF',
-            borderRadius: '3px',
-            fontSize: '14px',
-            '& fieldset': {
-              borderColor: '#DBDBDB',
-            },
-            '&:hover fieldset': {
-              borderColor: '#A8A8A8',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#1976d2',
-              borderWidth: '1px'
-            }
-          },
-          '& .MuiInputBase-input': {
-            padding: '14px 12px',
-            fontSize: '14px',
-            fontWeight: 400
-          }
-        }}
+        sx={textFieldStyles}
       />
 
    
