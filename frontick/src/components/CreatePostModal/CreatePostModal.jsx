@@ -360,7 +360,7 @@ const CreatePostModal = ({ isOpen, onClose, onCreatePost }) => {
                         onClick={() => document.getElementById('imageInput').click()}
                         disabled={isLoading}
                       >
-                        Select from computer
+                        Select from gallery
                       </button>
                       <button 
                         type="button"

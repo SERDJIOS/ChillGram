@@ -1,5 +1,6 @@
 const Message = require('../models/messageModel');
 const User = require('../models/userModel');
+const cloudinary = require('../config/cloudinary');
 
 // Отправка сообщения
 const sendMessage = async (req, res) => {
@@ -382,6 +383,120 @@ const sharePost = async (req, res) => {
   }
 };
 
+// Отправка медиа-сообщения (голосовое или видео)
+const sendMediaMessage = async (req, res) => {
+  try {
+    const { receiverId, messageType } = req.body;
+    const senderId = req.user._id;
+
+    if (!receiverId) {
+      return res.status(400).json({ error: 'Receiver ID is required' });
+    }
+
+    if (!req.files || (!req.files.audio && !req.files.video)) {
+      return res.status(400).json({ error: 'Media file is required' });
+    }
+
+    // Проверяем существование получателя
+    const receiver = await User.findById(receiverId);
+    if (!receiver) {
+      return res.status(404).json({ error: 'Receiver not found' });
+    }
+
+    let mediaUrl = null;
+    let finalMessageType = messageType;
+
+    try {
+      if (req.files.audio) {
+        // Загружаем голосовое сообщение в Cloudinary
+        const audioFile = req.files.audio[0];
+        
+        const uploadResult = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            {
+              resource_type: 'video', // Cloudinary использует 'video' для аудио файлов
+              format: 'mp3',
+              transformation: [
+                { quality: 'auto' },
+                { fetch_format: 'auto' }
+              ]
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          ).end(audioFile.buffer);
+        });
+
+        mediaUrl = uploadResult.secure_url;
+        finalMessageType = 'voice';
+      }
+
+      if (req.files.video) {
+        // Загружаем видеосообщение в Cloudinary
+        const videoFile = req.files.video[0];
+        
+        const uploadResult = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            {
+              resource_type: 'video',
+              format: 'mp4',
+              transformation: [
+                { quality: 'auto' },
+                { width: 300, height: 300, crop: 'fill' }, // Квадратное видео как в Telegram
+                { duration: 60 } // Максимум 60 секунд
+              ]
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          ).end(videoFile.buffer);
+        });
+
+        mediaUrl = uploadResult.secure_url;
+        finalMessageType = 'video_note';
+      }
+    } catch (uploadError) {
+      console.error('Media upload error:', uploadError);
+      return res.status(500).json({ error: 'Failed to upload media file' });
+    }
+
+    // Создаем сообщение
+    const messageData = {
+      sender: senderId,
+      receiver: receiverId,
+      messageType: finalMessageType,
+      mediaUrl: mediaUrl
+    };
+
+    const message = new Message(messageData);
+    await message.save();
+
+    // Получаем полную информацию о сообщении с данными отправителя
+    const populatedMessage = await Message.findById(message._id)
+      .populate('sender', 'username fullName profileImage')
+      .populate('receiver', 'username fullName profileImage');
+
+    // Отправляем сообщение через Socket.io
+    if (req.io) {
+      // Отправляем получателю
+      req.io.to(`user_${receiverId}`).emit('receiveMessage', populatedMessage);
+      
+      // Отправляем отправителю для подтверждения
+      req.io.to(`user_${senderId}`).emit('messageSent', populatedMessage);
+    }
+
+    res.status(201).json({
+      message: 'Media message sent successfully',
+      data: populatedMessage
+    });
+  } catch (error) {
+    console.error('Send media message error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 module.exports = {
   sendMessage,
   getMessages,
@@ -390,5 +505,6 @@ module.exports = {
   deleteMessage,
   getUnreadMessagesCount,
   searchUsers,
-  sharePost
+  sharePost,
+  sendMediaMessage
 }; 

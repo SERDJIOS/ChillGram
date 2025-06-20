@@ -19,13 +19,16 @@ const messageSchema = new mongoose.Schema({
   image: {
     type: String // URL или base64 строка изображения
   },
+  mediaUrl: {
+    type: String // URL медиа-файла (голосовое сообщение или видео)
+  },
   isRead: {
     type: Boolean,
     default: false
   },
   messageType: {
     type: String,
-    enum: ['text', 'image', 'file', 'shared_post'],
+    enum: ['text', 'image', 'file', 'shared_post', 'voice', 'video_note'],
     default: 'text'
   },
   sharedPost: {

@@ -34,11 +34,23 @@ const ChatWindow = ({
   const [showMessageMenu, setShowMessageMenu] = useState(null)
   const [editingMessage, setEditingMessage] = useState(null)
   const [editText, setEditText] = useState('')
+  const [isRecordingVoice, setIsRecordingVoice] = useState(false)
+  const [isRecordingVideo, setIsRecordingVideo] = useState(false)
+  const [mediaRecorder, setMediaRecorder] = useState(null)
+  const [recordingStream, setRecordingStream] = useState(null)
+  const [recordingTime, setRecordingTime] = useState(0)
+  const [recordingInterval, setRecordingInterval] = useState(null)
+  const [showCameraButton, setShowCameraButton] = useState(false)
+  const [recordedVoiceBlob, setRecordedVoiceBlob] = useState(null)
+  const [recordedVideoBlob, setRecordedVideoBlob] = useState(null)
+  const [isVoiceRecorded, setIsVoiceRecorded] = useState(false)
+  const [isVideoRecorded, setIsVideoRecorded] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const fileInputRef = useRef(null)
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
+  const recordingVideoRef = useRef(null)
   
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
   const defaultAvatar = DefaultProfilePic
@@ -112,6 +124,9 @@ const ChatWindow = ({
       }
       if (showMessageMenu && !event.target.closest('.message-menu-container')) {
         setShowMessageMenu(null)
+      }
+      if (showCameraButton && !event.target.closest('.mobileRecordingButtons')) {
+        setShowCameraButton(false)
       }
     }
 
@@ -520,6 +535,169 @@ const ChatWindow = ({
     setEditText('')
   }
 
+  // Функции для записи голосовых сообщений
+  const startVoiceRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      setRecordingStream(stream)
+      
+      const recorder = new MediaRecorder(stream)
+      const chunks = []
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data)
+        }
+      }
+      
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' })
+        await sendVoiceMessage(audioBlob)
+        cleanup()
+      }
+      
+      setMediaRecorder(recorder)
+      setIsRecordingVoice(true)
+      setRecordingTime(0)
+      
+      // Запускаем таймер
+      const interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1)
+      }, 1000)
+      setRecordingInterval(interval)
+      
+      recorder.start()
+    } catch (error) {
+      console.error('Error starting voice recording:', error)
+    }
+  }
+
+  const startVideoRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user' }, 
+        audio: true 
+      })
+      setRecordingStream(stream)
+      
+      if (recordingVideoRef.current) {
+        recordingVideoRef.current.srcObject = stream
+        recordingVideoRef.current.play()
+      }
+      
+      const recorder = new MediaRecorder(stream)
+      const chunks = []
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data)
+        }
+      }
+      
+      recorder.onstop = async () => {
+        const videoBlob = new Blob(chunks, { type: 'video/webm' })
+        await sendVideoMessage(videoBlob)
+        cleanup()
+      }
+      
+      setMediaRecorder(recorder)
+      setIsRecordingVideo(true)
+      setRecordingTime(0)
+      
+      // Запускаем таймер
+      const interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1)
+      }, 1000)
+      setRecordingInterval(interval)
+      
+      recorder.start()
+    } catch (error) {
+      console.error('Error starting video recording:', error)
+    }
+  }
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop()
+    }
+  }
+
+  const cancelRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop()
+    }
+    cleanup()
+  }
+
+  const cleanup = () => {
+    if (recordingStream) {
+      recordingStream.getTracks().forEach(track => track.stop())
+      setRecordingStream(null)
+    }
+    if (recordingInterval) {
+      clearInterval(recordingInterval)
+      setRecordingInterval(null)
+    }
+    setMediaRecorder(null)
+    setIsRecordingVoice(false)
+    setIsRecordingVideo(false)
+    setRecordingTime(0)
+  }
+
+  const sendVoiceMessage = async (audioBlob) => {
+    try {
+      const formData = new FormData()
+      formData.append('audio', audioBlob, 'voice-message.webm')
+      formData.append('receiverId', chat.otherUser._id)
+      formData.append('messageType', 'voice')
+      
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/send-media`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send voice message')
+      }
+    } catch (error) {
+      console.error('Error sending voice message:', error)
+    }
+  }
+
+  const sendVideoMessage = async (videoBlob) => {
+    try {
+      const formData = new FormData()
+      formData.append('video', videoBlob, 'video-message.webm')
+      formData.append('receiverId', chat.otherUser._id)
+      formData.append('messageType', 'video_note')
+      
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${API_CONFIG.API_URL}/messages/send-media`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send video message')
+      }
+    } catch (error) {
+      console.error('Error sending video message:', error)
+    }
+  }
+
+  const formatRecordingTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   const formatMessageTime = (dateString) => {
     const date = new Date(dateString)
     const now = new Date()
@@ -605,6 +783,135 @@ const ChatWindow = ({
     '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '😈',
     '👿', '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾'
   ]
+
+  // Определение мобильного устройства
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform))
+  }
+
+  // Показать кнопку камеры
+  const handleMicrophoneClick = () => {
+    setShowCameraButton(true)
+  }
+
+  // Скрыть кнопку камеры
+  const hideCameraButton = () => {
+    setShowCameraButton(false)
+  }
+
+  // Обновленная функция записи голосового сообщения
+  const startVoiceRecordingMobile = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      setRecordingStream(stream)
+      
+      const recorder = new MediaRecorder(stream)
+      const chunks = []
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data)
+        }
+      }
+      
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' })
+        setRecordedVoiceBlob(audioBlob)
+        setIsVoiceRecorded(true)
+        cleanup()
+      }
+      
+      setMediaRecorder(recorder)
+      setIsRecordingVoice(true)
+      setRecordingTime(0)
+      
+      // Запускаем таймер
+      const interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1)
+      }, 1000)
+      setRecordingInterval(interval)
+      
+      recorder.start()
+    } catch (error) {
+      console.error('Error starting voice recording:', error)
+    }
+  }
+
+  // Обновленная функция записи видеосообщения
+  const startVideoRecordingMobile = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user' }, 
+        audio: true 
+      })
+      setRecordingStream(stream)
+      
+      if (recordingVideoRef.current) {
+        recordingVideoRef.current.srcObject = stream
+        recordingVideoRef.current.play()
+      }
+      
+      const recorder = new MediaRecorder(stream)
+      const chunks = []
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data)
+        }
+      }
+      
+      recorder.onstop = async () => {
+        const videoBlob = new Blob(chunks, { type: 'video/webm' })
+        setRecordedVideoBlob(videoBlob)
+        setIsVideoRecorded(true)
+        cleanup()
+      }
+      
+      setMediaRecorder(recorder)
+      setIsRecordingVideo(true)
+      setRecordingTime(0)
+      
+      // Запускаем таймер
+      const interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1)
+      }, 1000)
+      setRecordingInterval(interval)
+      
+      recorder.start()
+    } catch (error) {
+      console.error('Error starting video recording:', error)
+    }
+  }
+
+  // Отправить записанное голосовое сообщение
+  const sendRecordedVoice = async () => {
+    if (recordedVoiceBlob) {
+      await sendVoiceMessage(recordedVoiceBlob)
+      setRecordedVoiceBlob(null)
+      setIsVoiceRecorded(false)
+      setShowCameraButton(false)
+    }
+  }
+
+  // Отправить записанное видеосообщение
+  const sendRecordedVideo = async () => {
+    if (recordedVideoBlob) {
+      await sendVideoMessage(recordedVideoBlob)
+      setRecordedVideoBlob(null)
+      setIsVideoRecorded(false)
+      setShowCameraButton(false)
+    }
+  }
+
+  // Удалить записанное сообщение
+  const deleteRecordedMessage = () => {
+    setRecordedVoiceBlob(null)
+    setRecordedVideoBlob(null)
+    setIsVoiceRecorded(false)
+    setIsVideoRecorded(false)
+    setShowCameraButton(false)
+  }
 
   if (!chat) return null
 
@@ -804,6 +1111,38 @@ const ChatWindow = ({
                           </div>
                         ) : (
                           <>
+                            {/* Голосовое сообщение */}
+                            {message.messageType === 'voice' && message.mediaUrl && (
+                              <div className={styles.voiceMessage}>
+                                <div className={styles.voiceMessageIcon}>
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" strokeWidth="2"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" strokeWidth="2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2"/>
+                                    <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" strokeWidth="2"/>
+                                  </svg>
+                                </div>
+                                <audio controls className={styles.audioPlayer}>
+                                  <source src={message.mediaUrl} type="audio/mpeg" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </div>
+                            )}
+
+                            {/* Видеосообщение (кружочек) */}
+                            {message.messageType === 'video_note' && message.mediaUrl && (
+                              <div className={styles.videoMessage}>
+                                <video 
+                                  controls 
+                                  className={styles.videoNote}
+                                  preload="metadata"
+                                >
+                                  <source src={message.mediaUrl} type="video/mp4" />
+                                  Your browser does not support the video element.
+                                </video>
+                              </div>
+                            )}
+
                             {/* Проверяем, есть ли изображение в сообщении */}
                             {message.image && (
                               <div className={styles.messageImage}>
@@ -887,6 +1226,55 @@ const ChatWindow = ({
 
       {/* Поле ввода сообщения */}
       <div className={styles.inputContainer}>
+        {/* Индикатор записи голосового сообщения */}
+        {isRecordingVoice && (
+          <div className={styles.recordingIndicator}>
+            <div className={styles.recordingInfo}>
+              <div className={styles.recordingDot}></div>
+              <span>Recording voice... {formatRecordingTime(recordingTime)}</span>
+            </div>
+            <button 
+              className={styles.cancelRecordingButton}
+              onClick={cancelRecording}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+
+        {/* Видео записи для видеосообщений */}
+        {isRecordingVideo && (
+          <div className={styles.videoRecordingContainer}>
+            <video 
+              ref={recordingVideoRef}
+              className={styles.recordingVideo}
+              autoPlay
+              muted
+              playsInline
+            />
+            <div className={styles.videoRecordingOverlay}>
+              <div className={styles.recordingInfo}>
+                <div className={styles.recordingDot}></div>
+                <span>Recording video... {formatRecordingTime(recordingTime)}</span>
+              </div>
+              <div className={styles.videoRecordingButtons}>
+                <button 
+                  className={styles.stopRecordingButton}
+                  onClick={stopRecording}
+                >
+                  Stop
+                </button>
+                <button 
+                  className={styles.cancelRecordingButton}
+                  onClick={cancelRecording}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Превью выбранного изображения */}
         {imagePreview && (
           <div className={styles.imagePreview}>
@@ -950,7 +1338,7 @@ const ChatWindow = ({
               value={newMessage}
               onChange={handleInputChange}
               className={styles.messageInput}
-              disabled={sending || !isConnected}
+              disabled={sending || !isConnected || isRecordingVoice || isRecordingVideo}
             />
             
             <button 
@@ -965,22 +1353,173 @@ const ChatWindow = ({
               </svg>
             </button>
             
-            <button 
-              type="submit" 
-              className={`${styles.sendButton} ${(newMessage.trim() || selectedImage) ? styles.active : ''}`}
-              disabled={(!newMessage.trim() && !selectedImage) || sending || !isConnected}
-            >
-              {sending ? (
-                <div className={styles.sendingSpinner}></div>
+            {/* Мобильная логика как в Telegram */}
+            {isMobileDevice() ? (
+              // Мобильная версия
+              <>
+                {newMessage.trim() || selectedImage ? (
+                  // Показываем кнопку отправки когда есть текст или изображение
+                  <button 
+                    type="submit" 
+                    className={`${styles.sendButton} ${styles.active}`}
+                    disabled={sending || !isConnected}
+                  >
+                    {sending ? (
+                      <div className={styles.sendingSpinner}></div>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path 
+                          d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
+                          fill="currentColor"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                ) : isVoiceRecorded ? (
+                  // Показываем кнопки для записанного голосового сообщения
+                  <div className={styles.recordedMessageButtons}>
+                    <button 
+                      type="button" 
+                      className={styles.deleteRecordedButton} 
+                      onClick={deleteRecordedMessage}
+                      title="Delete recording"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </button>
+                    <button 
+                      type="button" 
+                      className={styles.sendRecordedButton} 
+                      onClick={sendRecordedVoice}
+                      title="Send voice message"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                ) : isVideoRecorded ? (
+                  // Показываем кнопки для записанного видеосообщения
+                  <div className={styles.recordedMessageButtons}>
+                    <button 
+                      type="button" 
+                      className={styles.deleteRecordedButton} 
+                      onClick={deleteRecordedMessage}
+                      title="Delete recording"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </button>
+                    <button 
+                      type="button" 
+                      className={styles.sendRecordedButton} 
+                      onClick={sendRecordedVideo}
+                      title="Send video message"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  // Показываем микрофон и камеру
+                  <div className={styles.mobileRecordingButtons}>
+                    {showCameraButton && (
+                      <button 
+                        type="button" 
+                        className={styles.mobileCameraButton} 
+                        title="Record video message"
+                        onTouchStart={startVideoRecordingMobile}
+                        onTouchEnd={stopRecording}
+                        onMouseDown={startVideoRecordingMobile}
+                        onMouseUp={stopRecording}
+                        disabled={isRecordingVoice || isRecordingVideo}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                        </svg>
+                      </button>
+                    )}
+                    
+                    <button 
+                      type="button" 
+                      className={styles.mobileMicButton} 
+                      title="Record voice message"
+                      onClick={handleMicrophoneClick}
+                      onTouchStart={startVoiceRecordingMobile}
+                      onTouchEnd={stopRecording}
+                      onMouseDown={startVoiceRecordingMobile}
+                      onMouseUp={stopRecording}
+                      disabled={isRecordingVideo}
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" strokeWidth="2"/>
+                        <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2"/>
+                        <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              // Десктопная версия (старая логика)
+              newMessage.trim() || selectedImage ? (
+                <button 
+                  type="submit" 
+                  className={`${styles.sendButton} ${styles.active}`}
+                  disabled={sending || !isConnected}
+                >
+                  {sending ? (
+                    <div className={styles.sendingSpinner}></div>
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path 
+                        d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
+                        fill="currentColor"
+                      />
+                    </svg>
+                  )}
+                </button>
               ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path 
-                    d="M2 21l21-9L2 3v7l15 2-15 2v7z" 
-                    fill="currentColor"
-                  />
-                </svg>
-              )}
-            </button>
+                <div className={styles.recordingButtons}>
+                  <button 
+                    type="button" 
+                    className={styles.videoRecordButton} 
+                    title="Record video message"
+                    onClick={startVideoRecording}
+                    disabled={isRecordingVoice || isRecordingVideo}
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </button>
+                  
+                  <button 
+                    type="button" 
+                    className={styles.voiceRecordButton} 
+                    title="Record voice message"
+                    onMouseDown={startVoiceRecording}
+                    onMouseUp={stopRecording}
+                    onMouseLeave={stopRecording}
+                    onTouchStart={startVoiceRecording}
+                    onTouchEnd={stopRecording}
+                    disabled={isRecordingVideo}
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" strokeWidth="2"/>
+                      <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2"/>
+                      <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </button>
+                </div>
+              )
+            )}
           </div>
         </form>
         
