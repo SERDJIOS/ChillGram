@@ -388,7 +388,24 @@ const OtherProfile = () => {
                           alt={post.caption || 'Post'} 
                           className={styles.postImage}
                           muted
+                          loop
                           preload="metadata"
+                          controls
+                          onMouseEnter={(e) => {
+                            e.target.play().catch(() => {});
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.pause();
+                            e.target.currentTime = 0;
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (e.target.paused) {
+                              e.target.play();
+                            } else {
+                              e.target.pause();
+                            }
+                          }}
                         />
                       ) : (
                         <img 
