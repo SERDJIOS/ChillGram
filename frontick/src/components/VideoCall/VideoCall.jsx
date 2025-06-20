@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './VideoCall.module.css'
+import DefaultProfilePic from '../../assets/profile.png'
 
 const VideoCall = ({ 
   isOpen, 
@@ -155,7 +156,7 @@ const VideoCall = ({
             <div className={styles.confirmContent}>
               <div className={styles.confirmAvatar}>
                 <img 
-                  src={otherUser.profileImage || '/default-avatar.png'} 
+                  src={otherUser.profileImage || DefaultProfilePic} 
                   alt={otherUser.username}
                 />
               </div>
@@ -180,7 +181,7 @@ const VideoCall = ({
             <div className={styles.callHeader}>
               <div className={styles.userInfo}>
                 <img 
-                  src={otherUser.profileImage || '/default-avatar.png'} 
+                  src={otherUser.profileImage || DefaultProfilePic} 
                   alt={otherUser.username}
                   className={styles.userAvatar}
                 />
@@ -222,7 +223,7 @@ const VideoCall = ({
                 ) : (
                   <div className={styles.remoteVideoPlaceholder}>
                     <img 
-                      src={otherUser.profileImage || '/default-avatar.png'} 
+                      src={otherUser.profileImage || DefaultProfilePic} 
                       alt={otherUser.username}
                       className={styles.remoteAvatarLarge}
                     />
@@ -263,7 +264,7 @@ const VideoCall = ({
               <div className={styles.audioContainer}>
                 <div className={styles.audioAvatar}>
                   <img 
-                    src={otherUser.profileImage || '/default-avatar.png'} 
+                    src={otherUser.profileImage || DefaultProfilePic} 
                     alt={otherUser.username}
                   />
                   {isConnecting && (

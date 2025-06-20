@@ -20,7 +20,8 @@ import notificationsIcon from '../../assets/nav_icons/notifications/notification
 import notificationsFillIcon from '../../assets/nav_icons/notifications/notifications_fill.png'
 import createIcon from '../../assets/nav_icons/create/create.svg'
 import createFillIcon from '../../assets/nav_icons/create/create_fill.svg'
-import profileIcon from '../../assets/default_profile_pic.png'
+import profileIcon from '../../assets/images.png'
+
 import logoutIcon from '../../assets/nav_icons/logout.svg'
 import { API_CONFIG } from '../../config/api.js';
 

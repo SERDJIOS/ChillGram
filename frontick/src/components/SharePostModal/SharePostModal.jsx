@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './SharePostModal.module.css';
+import DefaultProfilePic from '../../assets/default_profile_pic.png';
 import { API_CONFIG } from '../../config/api.js';
 
 const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
@@ -269,17 +270,11 @@ const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {
                     >
                       <div className={styles.userInfo}>
                         <div className={styles.userAvatar}>
-                          {user.profileImage ? (
-                            <img 
-                              src={user.profileImage} 
-                              alt={user.username}
-                              className={styles.avatarImage}
-                            />
-                          ) : (
-                            <div className={styles.avatarPlaceholder}>
-                              {user.fullName?.charAt(0)?.toUpperCase() || user.username?.charAt(0)?.toUpperCase()}
-                            </div>
-                          )}
+                          <img 
+                            src={user.profileImage || DefaultProfilePic} 
+                            alt={user.username}
+                            className={styles.avatarImage}
+                          />
                         </div>
                         <div className={styles.userDetails}>
                           <span className={styles.username}>{user.username}</span>

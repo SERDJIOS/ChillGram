@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './ProfilePage.module.css'
 import logoutIcon from '../../assets/nav_icons/logout.svg'
 import sidebarLogo from '../../assets/sidebar.png'
-import DefaultProfilePic from '../../assets/default_profile_pic.png'
+import DefaultProfilePic from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js';
 import IconHeart from '../../assets/reactions/like.svg'
 import IconComment from '../../assets/reactions/comment.svg'
@@ -437,17 +437,11 @@ const ProfilePage = () => {
                         <div key={user._id} className={styles.userItem}>
                           <div className={styles.userInfo} onClick={() => handleUserClick(user._id)}>
                             <div className={styles.userAvatar}>
-                              {user.profileImage ? (
-                                <img 
-                                  src={user.profileImage} 
-                                  alt={user.username}
-                                  className={styles.userAvatarImage}
-                                />
-                              ) : (
-                                <div className={styles.userAvatarPlaceholder}>
-                                  {user.fullName?.charAt(0)?.toUpperCase() || user.username?.charAt(0)?.toUpperCase()}
-                                </div>
-                              )}
+                              <img 
+                                src={user.profileImage || DefaultProfilePic} 
+                                alt={user.username}
+                                className={styles.userAvatarImage}
+                              />
                             </div>
                             <div className={styles.userDetails}>
                               <span className={styles.userUsername}>{user.username}</span>

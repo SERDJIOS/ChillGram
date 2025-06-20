@@ -78,7 +78,9 @@
 }
 
 .profileIcon {
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+
   border: 2px solid transparent;
   transition: border-color 0.2s ease;
 }

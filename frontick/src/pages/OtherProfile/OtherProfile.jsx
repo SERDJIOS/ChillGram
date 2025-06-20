@@ -5,6 +5,7 @@ import PostViewModal from '../../components/PostViewModal/PostViewModal'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import styles from './OtherProfile.module.css'
 import sidebarLogo from '../../assets/sidebar.png'
+import DefaultProfilePic from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js';
 import IconHeart from '../../assets/reactions/like.svg'
 import IconComment from '../../assets/reactions/comment.svg'
@@ -290,17 +291,11 @@ const OtherProfile = () => {
           <div className={styles.profileHeader}>
             <div className={styles.avatarSection}>
               <div className={styles.avatarContainer}>
-                {profile.profileImage ? (
-                  <img 
-                    src={profile.profileImage} 
-                    alt={profile.username}
-                    className={styles.avatar}
-                  />
-                ) : (
-                  <div className={styles.avatarPlaceholder}>
-                    {profile.fullName?.charAt(0)?.toUpperCase() || profile.username?.charAt(0)?.toUpperCase()}
-                  </div>
-                )}
+                <img 
+                  src={profile.profileImage || DefaultProfilePic} 
+                  alt={profile.username}
+                  className={styles.avatar}
+                />
               </div>
             </div>
 
@@ -462,17 +457,11 @@ const OtherProfile = () => {
                         <div key={user._id} className={styles.userItem}>
                           <div className={styles.userInfo} onClick={() => handleUserClick(user._id)}>
                             <div className={styles.userAvatar}>
-                              {user.profileImage ? (
-                                <img 
-                                  src={user.profileImage} 
-                                  alt={user.username}
-                                  className={styles.userAvatarImage}
-                                />
-                              ) : (
-                                <div className={styles.userAvatarPlaceholder}>
-                                  {user.fullName?.charAt(0)?.toUpperCase() || user.username?.charAt(0)?.toUpperCase()}
-                                </div>
-                              )}
+                              <img 
+                                src={user.profileImage || DefaultProfilePic} 
+                                alt={user.username}
+                                className={styles.userAvatarImage}
+                              />
                             </div>
                             <div className={styles.userDetails}>
                               <span className={styles.userUsername}>{user.username}</span>

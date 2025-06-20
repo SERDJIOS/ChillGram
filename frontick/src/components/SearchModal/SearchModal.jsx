@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './SearchModal.module.css'
+import DefaultProfilePic from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js';
 
 const SearchModal = ({ isOpen, onClose }) => {
@@ -167,10 +168,10 @@ const SearchModal = ({ isOpen, onClose }) => {
                   >
                     <div className={styles.userAvatar}>
                       <img
-                        src={user.profileImage || '/src/assets/default_profile_pic.png'}
+                        src={user.profileImage || DefaultProfilePic}
                         alt={user.username}
                         onError={(e) => {
-                          e.target.src = '/src/assets/default_profile_pic.png'
+                          e.target.src = DefaultProfilePic
                         }}
                       />
                     </div>
@@ -194,10 +195,10 @@ const SearchModal = ({ isOpen, onClose }) => {
                 >
                   <div className={styles.userAvatar}>
                     <img
-                      src={user.profileImage || '/src/assets/default_profile_pic.png'}
+                      src={user.profileImage || DefaultProfilePic}
                       alt={user.username}
                       onError={(e) => {
-                        e.target.src = '/src/assets/default_profile_pic.png'
+                        e.target.src = DefaultProfilePic
                       }}
                     />
                   </div>

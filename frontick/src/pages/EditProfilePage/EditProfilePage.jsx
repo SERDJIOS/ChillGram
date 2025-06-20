@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from '../../components/Sidebar/Sidebar'
-import DefaultProfilePic from '../../assets/default_profile_pic.png'
+import DefaultProfilePic from '../../assets/profile.png'
 import styles from './EditProfilePage.module.css'
 import axios from 'axios'
 import { API_CONFIG } from '../../config/api.js';

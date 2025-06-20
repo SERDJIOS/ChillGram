@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './StartChatModal.module.css'
+import DefaultProfilePic from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js'
 
 const StartChatModal = ({ isOpen, onClose, onUserSelect }) => {
@@ -138,10 +139,10 @@ const StartChatModal = ({ isOpen, onClose, onUserSelect }) => {
                   >
                     <div className={styles.userAvatar}>
                       <img
-                        src={chat.otherUser.profileImage || '/default-avatar.png'}
+                        src={chat.otherUser.profileImage || DefaultProfilePic}
                         alt={chat.otherUser.username}
                         onError={(e) => {
-                          e.target.src = '/default-avatar.png'
+                          e.target.src = DefaultProfilePic
                         }}
                       />
                     </div>
@@ -173,10 +174,10 @@ const StartChatModal = ({ isOpen, onClose, onUserSelect }) => {
                   >
                     <div className={styles.userAvatar}>
                       <img
-                        src={user.profileImage || '/default-avatar.png'}
+                        src={user.profileImage || DefaultProfilePic}
                         alt={user.username}
                         onError={(e) => {
-                          e.target.src = '/default-avatar.png'
+                          e.target.src = DefaultProfilePic
                         }}
                       />
                     </div>

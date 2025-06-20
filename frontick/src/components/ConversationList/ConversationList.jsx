@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ConversationList.module.css'
+import DefaultProfilePic from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js';
 
 const ConversationList = ({ 
@@ -11,7 +12,7 @@ const ConversationList = ({
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [isSearching, setIsSearching] = useState(false)
-  const defaultAvatar = '/default-avatar.png'
+  const defaultAvatar = DefaultProfilePic
 
   const filteredConversations = (conversations || []).filter(chat =>
     chat?.otherUser?.username?.toLowerCase().includes(searchQuery.toLowerCase())

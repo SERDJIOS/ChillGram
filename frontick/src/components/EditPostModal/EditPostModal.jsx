@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EditPostModal.module.css';
+import DefaultProfilePic from '../../assets/default_profile_pic.png';
 
 const EditPostModal = ({ isOpen, onClose, post, onSave }) => {
   const [caption, setCaption] = useState('');
@@ -69,7 +70,7 @@ const EditPostModal = ({ isOpen, onClose, post, onSave }) => {
           <div className={styles.editSection}>
             <div className={styles.userInfo}>
               <img 
-                src={post.author?.profileImage || '/src/assets/default_profile_pic.png'} 
+                src={post.author?.profileImage || DefaultProfilePic} 
                 alt={post.author?.username || 'User'}
                 className={styles.profilePic}
               />

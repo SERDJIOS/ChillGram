@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './ChatWindow.module.css'
+import DefaultProfilePic from '../../assets/profile.png'
 import VideoCall from '../VideoCall/VideoCall'
 import { API_CONFIG } from '../../config/api.js';
 
@@ -40,7 +41,7 @@ const ChatWindow = ({
   const canvasRef = useRef(null)
   
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
-  const defaultAvatar = '/default-avatar.png'
+  const defaultAvatar = DefaultProfilePic
   const navigate = useNavigate()
 
   // Загружаем сообщения при выборе чата
