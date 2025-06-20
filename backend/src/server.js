@@ -35,7 +35,9 @@ const io = new Server(server, {
       'http://localhost:5175',
       'https://chillgram.vercel.app',
       'https://chillgram-git-main-serdjios-projects.vercel.app',
-      'https://chillgram-serdjios-projects.vercel.app'
+      'https://chillgram-serdjios-projects.vercel.app',
+      'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app',
+      'https://chillgram-git-main-serdjios-projects.vercel.app'
     ],
     methods: ['GET', 'POST'],
     credentials: true
@@ -62,7 +64,9 @@ app.use(cors({
     'http://localhost:5175',
     'https://chillgram.vercel.app',
     'https://chillgram-git-main-serdjios-projects.vercel.app',
-    'https://chillgram-serdjios-projects.vercel.app'
+    'https://chillgram-serdjios-projects.vercel.app',
+    'https://chillgram-2y6yovg1j-serdjios-projects.vercel.app',
+    /https:\/\/.*\.vercel\.app$/
   ],
   credentials: true
 }));
