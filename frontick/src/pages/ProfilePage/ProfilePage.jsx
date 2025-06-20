@@ -378,7 +378,7 @@ const ProfilePage = () => {
                               muted
                               loop
                               preload="metadata"
-                              controls
+                              playsInline
                               onMouseEnter={(e) => {
                                 e.target.play().catch(() => {});
                               }}
@@ -386,13 +386,9 @@ const ProfilePage = () => {
                                 e.target.pause();
                                 e.target.currentTime = 0;
                               }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (e.target.paused) {
-                                  e.target.play();
-                                } else {
-                                  e.target.pause();
-                                }
+                              onTouchStart={(e) => {
+                                // На мобильных устройствах начинаем воспроизведение при касании
+                                e.target.play().catch(() => {});
                               }}
                             />
                           ) : (
