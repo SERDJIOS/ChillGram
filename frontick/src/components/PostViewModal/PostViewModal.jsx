@@ -8,6 +8,7 @@ import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
 import shareIcon from '../../assets/share_icon.svg';
+import profilePic from '../../assets/profile.png';
 import { API_CONFIG } from '../../config/api.js';
 
 const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostChange, currentUserId, onPostUpdated, onPostDeleted }) => {
@@ -394,7 +395,7 @@ const PostViewModal = ({ isOpen, onClose, post, posts, currentPostIndex, onPostC
           <div className={styles.postHeader}>
             <div className={styles.userInfo}>
               <img 
-                src={currentPost?.author?.profileImage || '/src/assets/default_profile_pic.png'} 
+                src={currentPost?.author?.profileImage || profilePic} 
                 alt={currentPost?.author?.username || 'User'}
                 className={styles.profilePic}
                 onClick={() => handleUserClick(currentPost?.author?._id)}

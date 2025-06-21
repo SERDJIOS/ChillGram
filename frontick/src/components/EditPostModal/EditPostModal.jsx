@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EditPostModal.module.css';
-import DefaultProfilePic from '../../assets/default_profile_pic.png';
+import DefaultProfilePic from '../../assets/profile.png';
 
 const EditPostModal = ({ isOpen, onClose, post, onSave }) => {
   const [caption, setCaption] = useState('');

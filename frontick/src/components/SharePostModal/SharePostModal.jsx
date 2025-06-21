@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './SharePostModal.module.css';
-import DefaultProfilePic from '../../assets/default_profile_pic.png';
+import DefaultProfilePic from '../../assets/profile.png';
 import { API_CONFIG } from '../../config/api.js';
 
 const SharePostModal = ({ isOpen, onClose, post, currentUserId }) => {

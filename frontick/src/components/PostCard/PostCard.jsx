@@ -7,6 +7,7 @@ import SharePostModal from '../SharePostModal/SharePostModal';
 import arrowBackIcon from '../../assets/arrow_back.svg';
 import arrowForwardIcon from '../../assets/arrow_forward.svg';
 import shareIcon from '../../assets/share_icon.svg';
+import profilePic from '../../assets/profile.png';
 import { API_CONFIG } from '../../config/api.js';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -177,7 +178,7 @@ const PostCard = ({ post, onLike, onComment, onEdit, onDelete, currentUserId, is
         <div className={styles.postHeader}>
           <div className={styles.userInfo}>
             <img 
-              src={post.author?.profileImage || '/src/assets/default_profile_pic.png'} 
+              src={post.author?.profileImage || profilePic} 
               alt={post.author?.username || 'User'}
               className={styles.profilePic}
               onClick={handleUserClick}

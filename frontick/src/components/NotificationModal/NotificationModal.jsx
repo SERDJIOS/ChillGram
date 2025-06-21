@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './NotificationModal.module.css'
-import defaultAvatar from '../../assets/default_profile_pic.png'
+import defaultAvatar from '../../assets/profile.png'
 import { API_CONFIG } from '../../config/api.js';
 
 const NotificationModal = ({ isOpen, onClose }) => {
